@@ -1,0 +1,34 @@
+@import 'tailwindcss';
+@theme {
+  --color-primary: #2e2f93;         
+  --color-primary-hover: #4142ba;    
+  --color-secondary: #7778d6;        
+  --color-secondary-hover: #9595e0;  
+  --color-accent: #b4b5e9;           
+  --color-background: #f0f0fa;      
+  --color-text-dark: #13144b;        
+  --color-text-light: #d8d8f3;       
+}
+
+/* Personaliza el tamaño de la scrollbar */
+::-webkit-scrollbar {
+  width: 7px; /* Para la barra vertical */
+  height: 7px; /* Para la barra horizontal */
+}
+
+/* Personaliza el fondo de la scrollbar */
+::-webkit-scrollbar-track {
+  background: #2e2f93;
+  border-radius: 10px;
+}
+
+/* Personaliza el pulgar (thumb) de la scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #0a1626;
+  border-radius: 10px;
+}
+
+/* Cambiar color del pulgar al pasar el mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
