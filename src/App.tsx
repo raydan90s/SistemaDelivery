@@ -1,12 +1,24 @@
-import '@styles/index.css'
+import '@styles/index.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navbar } from '@components/navbar/Navbar';
+import { Footer } from '@components/Footer/Footer';
+import HomePage from '@pages/Home.page';
+import { CartProvider } from '@context/CartContext';
 
 export default function App() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold underline text-text-dark">
-        Hello world!
-      </h1>
-    </div>
-  )
-}
+    <CartProvider>
+      <div className="font-inter bg-background min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow p-6">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div> 
+    </CartProvider>
 
+  );
+}

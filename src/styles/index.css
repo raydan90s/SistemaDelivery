@@ -1,13 +1,13 @@
 @import 'tailwindcss';
 @theme {
-  --color-primary: #2e2f93;         
-  --color-primary-hover: #4142ba;    
-  --color-secondary: #7778d6;        
-  --color-secondary-hover: #9595e0;  
-  --color-accent: #b4b5e9;           
-  --color-background: #f0f0fa;      
-  --color-text-dark: #13144b;        
-  --color-text-light: #d8d8f3;       
+  --color-primary: #cb2b2b;        
+  --color-primary-hover: #f04141;    
+  --color-secondary: #a22121;      
+  --color-secondary-hover: #f27878; 
+  --color-accent: #f9d1d1;          
+  --color-background: #fceded;       
+  --color-text-dark: #290303;        
+  --color-text-light: #f4a5a5;       
 }
 
 /* Personaliza el tamaño de la scrollbar */
