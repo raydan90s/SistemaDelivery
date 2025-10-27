@@ -7,7 +7,9 @@
   --color-accent: #f9d1d1;          
   --color-background: #fceded;       
   --color-text-dark: #290303;        
-  --color-text-light: #f4a5a5;       
+  --color-text-light: #f4a5a5; 
+  --color-footer: #1f1f1f;
+  --color-footer-text: #fceded;      
 }
 
 /* Personaliza el tamaño de la scrollbar */
@@ -18,7 +20,7 @@
 
 /* Personaliza el fondo de la scrollbar */
 ::-webkit-scrollbar-track {
-  background: #2e2f93;
+  background: #cb2b2b;
   border-radius: 10px;
 }
 

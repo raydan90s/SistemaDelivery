@@ -1,24 +1,24 @@
-import '@styles/index.css';
+import { CartProvider } from './context/CartContext';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Navbar } from '@components/navbar/Navbar';
-import { Footer } from '@components/Footer/Footer';
-import HomePage from '@pages/Home.page';
-import { CartProvider } from '@context/CartContext';
+import Home from './pages/Home';
+import Navbar from '@components/Navbar';
+import Footer from '@components/Footer';
 
-export default function App() {
+function App() {
   return (
     <CartProvider>
-      <div className="font-inter bg-background min-h-screen flex flex-col">
+      <div>
         <Navbar />
-        <main className="flex-grow p-6">
+        <main>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Home/>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         <Footer />
       </div> 
     </CartProvider>
-
   );
 }
+
+export default App;
