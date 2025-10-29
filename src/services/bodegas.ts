@@ -11,3 +11,17 @@ export async function fetchBodegas() {
     console.log("Datos de bodegas:", data);
   }
 }
+
+export async function seedBodegas() {
+  const { data, error } = await supabase
+    .from("bodegas")
+    .insert([
+      { nombre: "Bodega Suoreste", ubicacion: "Guayaquil", estado_id: 1},
+    ]);
+
+  if (error) {
+    console.error("Error al insertar datos quemados:", error);
+  } else {
+    console.log("Datos quemados insertados:", data);
+  }
+}

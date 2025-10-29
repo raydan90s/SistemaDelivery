@@ -1,8 +1,9 @@
 import { CartProvider } from './context/CartContext';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from '@pages/Home';
 import Navbar from '@components/Navbar';
 import Footer from '@components/Footer';
+
 
 function App() {
   return (
