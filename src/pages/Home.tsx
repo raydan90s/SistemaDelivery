@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 import FeaturedProducts from '../components/FeaturedProducts';
 import FloatingCartButton from '../components/FloatingCartButton';
+import { fetchBodegas } from '@services/bodegas';
 
 const Home: React.FC = () => {
+  useEffect(() => {
+    fetchBodegas();
+  }, []);
+
   return (
     <div className="min-h-screen">
-      <Hero/>
+      <Hero />
       <Categories />
       <FeaturedProducts />
       <FloatingCartButton />
