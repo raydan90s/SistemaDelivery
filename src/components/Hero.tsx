@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import HeroImg from '@assets/Hero.jpeg';
 
 const Hero: React.FC = () => {
@@ -25,6 +26,9 @@ const Hero: React.FC = () => {
         <button className="bg-primary hover:bg-primary-hover text-white font-semibold px-8 py-4 rounded-full text-lg shadow-lg transition-all ease-in-out duration-300 hover:scale-105">
           Ordena ahora
         </button>
+        <Link to="/pedidos">
+        <button>Ir a Pedidos</button>
+       </Link>
       </div>
     </section>
   );
