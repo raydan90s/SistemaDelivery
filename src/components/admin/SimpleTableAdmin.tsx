@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Edit2, Trash2, Search, X } from 'lucide-react';
 import NuevoButton from '@components/Botones/nuevoButton';
-import ExportButtons from '@components/ExportButtons';
+import ExportButtons from '@components/Botones/ExportButtons';
 
 interface Field {
   name: string;
