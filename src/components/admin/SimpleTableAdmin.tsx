@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Edit2, Trash2, Search, X } from 'lucide-react';
 import NuevoButton from '@components/Botones/nuevoButton';
+import ExportButtons from '@components/ExportButtons';
 
 interface Field {
   name: string;
@@ -20,20 +21,25 @@ interface CrudOperations<T, TInsert, TUpdate> {
   delete: (id: number) => Promise<boolean>;
 }
 
+interface Column<T> {
+  key: keyof T;
+  label: string;
+  render?: (value: any, item: T) => React.ReactNode;
+  exportRender?: (value: any, item: T) => string | number;
+}
+
 interface SimpleTableAdminProps<T extends { id: number }, TInsert, TUpdate> {
   title: string;
   description: string;
   buttonLabel: string;
   fields: Field[];
   operations: CrudOperations<T, TInsert, TUpdate>;
-  columns: {
-    key: keyof T;
-    label: string;
-    render?: (value: any, item: T) => React.ReactNode;
-  }[];
+  columns: Column<T>[];
   searchFields?: (keyof T)[];
   getFormData: (formValues: Record<string, any>) => TInsert | TUpdate;
   getInitialFormData: (item?: T) => Record<string, any>;
+  enableExport?: boolean;
+  exportFilename?: string;
 }
 
 function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
@@ -45,7 +51,9 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   columns,
   searchFields = [],
   getFormData,
-  getInitialFormData
+  getInitialFormData,
+  enableExport = true,
+  exportFilename
 }: SimpleTableAdminProps<T, TInsert, TUpdate>) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
@@ -122,7 +130,6 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   };
 
   const handleSubmit = async () => {
-    // Validar campos requeridos
     const requiredFields = fields.filter(f => f.required);
     for (const field of requiredFields) {
       if (!formValues[field.name]?.toString().trim()) {
@@ -170,6 +177,22 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
     });
   });
 
+  // Preparar columnas para exportación
+  const exportColumns = columns.map(col => ({
+    key: String(col.key),
+    label: col.label,
+    render: col.exportRender || ((value: any, item: T) => {
+      if (col.render) {
+        const rendered = col.render(value, item);
+        if (typeof rendered === 'string' || typeof rendered === 'number') {
+          return rendered;
+        }
+        return String(value ?? '');
+      }
+      return String(value ?? '');
+    })
+  }));
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -196,7 +219,18 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <NuevoButton label={buttonLabel} onClick={() => handleOpenModal()} />
+        <div className="flex gap-2">
+          {enableExport && (
+            <ExportButtons
+              title={title}
+              subtitle={description}
+              filename={exportFilename || title.toLowerCase().replace(/\s+/g, '_')}
+              columns={exportColumns}
+              data={filteredData}
+            />
+          )}
+          <NuevoButton label={buttonLabel} onClick={() => handleOpenModal()} />
+        </div>
       </div>
 
       <div className="overflow-x-auto">

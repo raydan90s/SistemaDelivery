@@ -19,6 +19,8 @@ const CiudadesAdmin: React.FC = () => {
       title="Ciudades"
       description="Gestiona las ciudades del Ecuador por provincia"
       buttonLabel="Nueva Ciudad"
+      enableExport={true}
+      exportFilename="ciudades_ecuador"
       
       fields={[
         {
@@ -45,12 +47,21 @@ const CiudadesAdmin: React.FC = () => {
       ]}
       
       columns={[
-        { key: 'id', label: 'ID' },
-        { key: 'nombre', label: 'Ciudad' },
+        { 
+          key: 'id', 
+          label: 'ID',
+          exportRender: (value) => value
+        },
+        { 
+          key: 'nombre', 
+          label: 'Ciudad',
+          exportRender: (value) => value
+        },
         { 
           key: 'provincias', 
           label: 'Provincia',
-          render: (value) => (value as { nombre: string })?.nombre || 'Sin provincia'
+          render: (value) => (value as { nombre: string })?.nombre || 'Sin provincia',
+          exportRender: (value) => (value as { nombre: string })?.nombre || 'Sin provincia'
         }
       ]}
       
