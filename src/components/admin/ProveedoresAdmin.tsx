@@ -72,7 +72,7 @@ const ProveedoresAdmin: React.FC = () => {
           }
         },
         {
-          name: 'estado_id',
+          name: 'estado_generales',
           label: 'Estado',
           type: 'select',
           placeholder: 'Selecciona un estado',
