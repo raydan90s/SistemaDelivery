@@ -4,8 +4,8 @@ import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
 import ProvinciasAdmin from '@components/admin/ProvinciaAdmin';
 import CiudadesAdmin from '@components/admin/CiudadesAdmin';
-//import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
-//import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
+import EstadosGeneralesAdmin from '@components/admin/EstadosGeneralesAdmin';
+import MetodosPagoAdmin from '@components/admin/MetodosPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
 //import ProveedoresAdmin from './modules/ProveedoresAdmin';
 
@@ -48,7 +48,7 @@ const modules = [
       description: 'Activo, Inactivo, Eliminado',
       icon: Settings,
       color: 'bg-gray-500',
-      //component: EstadosGeneralesAdmin
+      component: EstadosGeneralesAdmin
     },
     {
       id: 'metodopago' as ModuleType,
@@ -56,7 +56,7 @@ const modules = [
       description: 'Efectivo, Tarjeta, Transferencia',
       icon: DollarSign,
       color: 'bg-emerald-500',
-      //component: MetodoPagoAdmin
+      component: MetodosPagoAdmin
     },
     {
       id: 'iva' as ModuleType,
