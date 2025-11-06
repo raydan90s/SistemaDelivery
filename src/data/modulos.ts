@@ -7,7 +7,7 @@ import CiudadesAdmin from '@components/admin/CiudadesAdmin';
 //import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
-//import ProveedoresAdmin from './modules/ProveedoresAdmin';
+import ProveedoresAdmin from '@components/admin/ProveedoresAdmin';
 
 const modules = [
     {
@@ -72,7 +72,7 @@ const modules = [
       description: 'Gestión de proveedores',
       icon: Users,
       color: 'bg-indigo-500',
-      //component: ProveedoresAdmin
+      component: ProveedoresAdmin
     }
   ];
 
