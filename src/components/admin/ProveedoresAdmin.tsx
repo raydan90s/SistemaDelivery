@@ -7,7 +7,7 @@ import {
   deleteProveedor
 } from '@services/proveedores';
 import { fetchProvincias } from '@services/provincia';
-import { fetchEstadosGenerales } from '@services/estadosGenerales';
+import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
 import type { Database } from '@models/supabase';
 
 type Proveedor = Database['public']['Tables']['proveedores']['Row'];
@@ -46,7 +46,7 @@ const ProveedoresAdmin: React.FC = () => {
         {
           name: 'correo',
           label: 'Correo electrónico',
-          type: 'email',
+          type: 'text',
           placeholder: 'Ej: contacto@proveedor.com',
           required: false
         },
@@ -96,13 +96,16 @@ const ProveedoresAdmin: React.FC = () => {
         { key: 'correo', label: 'Correo' },
         { key: 'direccion', label: 'Dirección' },
         { 
-          key: 'provincias', 
+          key: 'provincia_id', 
           label: 'Provincia',
           render: (value) => (value as { nombre: string })?.nombre || 'Sin provincia',
           exportRender: (value) => (value as { nombre: string })?.nombre || 'Sin provincia'
         },
+
+        
         { 
-          key: 'estados_generales',
+
+          key: 'estado_id',
           label: 'Estado',
           render: (value) => (value as { descripcion: string })?.descripcion || 'Sin estado',
           exportRender: (value) => (value as { descripcion: string })?.descripcion || 'Sin estado'
