@@ -88,3 +88,19 @@ export async function fetchCategoriasProductoOptions() {
     label: cat.nombre
   }));
 }
+
+// Obtener solo categorías activas para mostrar al cliente
+export async function fetchCategoriasActivas() {
+  const ESTADO_ACTIVO = 1;
+  const { data, error } = await supabase
+    .from('categoriasproducto')
+    .select('*')
+    .eq('estado_id', ESTADO_ACTIVO)
+    .order('nombre', { ascending: true });
+
+  if (error) {
+    console.error('Error al obtener categorías activas:', error);
+    throw error;
+  }
+  return data;
+}

@@ -94,3 +94,31 @@ export async function fetchPromocionesOptions() {
     label: promo.nombre
   }));
 }
+
+// Obtener promociones activas con sus productos
+export async function fetchPromocionesConProductos() {
+  const { data, error } = await supabase
+    .from('promociones')
+    .select(`
+      *,
+      estado:estados_generales(id, descripcion),
+      promocionesproductos(
+        producto:productos(
+          id,
+          nombre,
+          descripcion,
+          precio,
+          imagen_url
+        )
+      )
+    `)
+    .eq('estado_id', ESTADO_ACTIVO)
+    .gte('fecha_fin', new Date().toISOString())
+    .order('fecha_inicio', { ascending: false });
+
+  if (error) {
+    console.error('Error al obtener promociones con productos:', error);
+    throw error;
+  }
+  return data as any[];
+}

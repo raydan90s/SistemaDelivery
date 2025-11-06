@@ -119,3 +119,66 @@ export async function deleteProducto(id: number) {
 
   return true;
 }
+
+// Obtener productos por categoría
+export async function fetchProductosPorCategoria(categoriaId: number) {
+  const { data, error } = await supabase
+    .from('productos')
+    .select(`
+      *,
+      categoria:categoriasproducto(id, nombre),
+      unidad_medida:unidadmedida(id, descripcion),
+      estado:estados_generales(id, descripcion)
+    `)
+    .eq('estado_id', ESTADO_ACTIVO)
+    .eq('categoria_id', categoriaId)
+    .order('nombre', { ascending: true });
+
+  if (error) {
+    console.error('Error al obtener productos por categoría:', error);
+    throw error;
+  }
+  return data as any[];
+}
+
+// Buscar productos por nombre o descripción
+export async function searchProductos(searchTerm: string) {
+  const { data, error } = await supabase
+    .from('productos')
+    .select(`
+      *,
+      categoria:categoriasproducto(id, nombre),
+      unidad_medida:unidadmedida(id, descripcion),
+      estado:estados_generales(id, descripcion)
+    `)
+    .eq('estado_id', ESTADO_ACTIVO)
+    .or(`nombre.ilike.%${searchTerm}%,descripcion.ilike.%${searchTerm}%`)
+    .order('nombre', { ascending: true });
+
+  if (error) {
+    console.error('Error al buscar productos:', error);
+    throw error;
+  }
+  return data as any[];
+}
+
+// Obtener productos destacados (los primeros 8 productos activos)
+export async function fetchProductosDestacados() {
+  const { data, error } = await supabase
+    .from('productos')
+    .select(`
+      *,
+      categoria:categoriasproducto(id, nombre),
+      unidad_medida:unidadmedida(id, descripcion),
+      estado:estados_generales(id, descripcion)
+    `)
+    .eq('estado_id', ESTADO_ACTIVO)
+    .order('id', { ascending: false })
+    .limit(8);
+
+  if (error) {
+    console.error('Error al obtener productos destacados:', error);
+    throw error;
+  }
+  return data as any[];
+}
