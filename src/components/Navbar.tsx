@@ -1,9 +1,9 @@
-import React from 'react';
-import { UtensilsCrossed } from 'lucide-react';
+import React, { useState } from 'react';
+import { UtensilsCrossed, Search, User, ShoppingCart } from 'lucide-react';
 import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
-  const navItems = ['Inicio', 'Menú', 'Ofertas', 'Contacto'];
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <nav className="bg-primary shadow-md sticky top-0 z-50">
@@ -11,27 +11,36 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between">
           <Link
             to='/'
-            className="flex items-center gap-2 text-white hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2 text-white hover:opacity-90 transition-opacity flex-shrink-0"
           >
             <UtensilsCrossed className="w-8 h-8" />
             <span className="text-2xl font-bold">FoodExpress</span>
           </Link>
-          <div className="hidden md:flex gap-6">
-            {navItems.map((item) => (
-              <button
-                key={item}
-                className="cursor-pointer text-white font-medium hover:bg-primary-hover px-4 py-2 rounded-lg transition-all ease-in-out duration-300"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
 
-          <button className="md:hidden text-white">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          <div className="flex items-center gap-4 flex-1 justify-end">
+            <div className="relative w-full max-w-xl">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-lg border-none focus:ring-2 focus:ring-white/50 focus:outline-none bg-white"
+              />
+            </div>
+
+            <div className="flex items-center gap-4 flex-shrink-0">
+              <button className="text-white hover:bg-primary-hover p-2 rounded-lg transition-all">
+                <User className="w-6 h-6" />
+              </button>
+              <button className="text-white hover:bg-primary-hover p-2 rounded-lg transition-all relative">
+                <ShoppingCart className="w-6 h-6" />
+                <span className="absolute -top-1 -right-1 bg-white text-red-500 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  0
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
