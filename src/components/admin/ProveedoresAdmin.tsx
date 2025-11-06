@@ -6,11 +6,13 @@ import {
   updateProveedor,
   deleteProveedor
 } from '@services/proveedores';
+
+import type { ProveedorConRelaciones } from '@services/proveedores';
 import { fetchProvincias } from '@services/provincia';
 import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
 import type { Database } from '@models/supabase';
 
-type Proveedor = Database['public']['Tables']['proveedores']['Row'];
+type Proveedor = ProveedorConRelaciones; // Extendido con relaciones
 type ProveedorInsert = Database['public']['Tables']['proveedores']['Insert'];
 type ProveedorUpdate = Database['public']['Tables']['proveedores']['Update'];
 
@@ -22,41 +24,11 @@ const ProveedoresAdmin: React.FC = () => {
       buttonLabel="Nuevo Proveedor"
       
       fields={[
-        {
-          name: 'nombre',
-          label: 'Nombre del Proveedor',
-          type: 'text',
-          placeholder: 'Ej: Distribuidora Los Andes',
-          required: true
-        },
-        {
-          name: 'contacto',
-          label: 'Persona de Contacto',
-          type: 'text',
-          placeholder: 'Ej: Juan Pérez',
-          required: true
-        },
-        {
-          name: 'telefono',
-          label: 'Teléfono',
-          type: 'text',
-          placeholder: 'Ej: 0999999999',
-          required: false
-        },
-        {
-          name: 'correo',
-          label: 'Correo electrónico',
-          type: 'text',
-          placeholder: 'Ej: contacto@proveedor.com',
-          required: false
-        },
-        {
-          name: 'direccion',
-          label: 'Dirección',
-          type: 'text',
-          placeholder: 'Ej: Av. América y Colón',
-          required: false
-        },
+        { name: 'nombre', label: 'Nombre del Proveedor', type: 'text', placeholder: 'Ej: Distribuidora Los Andes', required: true },
+        { name: 'contacto', label: 'Persona de Contacto', type: 'text', placeholder: 'Ej: Juan Pérez', required: true },
+        { name: 'telefono', label: 'Teléfono', type: 'text', placeholder: 'Ej: 0999999999', required: false },
+        { name: 'correo', label: 'Correo electrónico', type: 'text', placeholder: 'Ej: contacto@proveedor.com', required: false },
+        { name: 'direccion', label: 'Dirección', type: 'text', placeholder: 'Ej: Av. América y Colón', required: false },
         {
           name: 'provincia_id',
           label: 'Provincia',
@@ -65,29 +37,22 @@ const ProveedoresAdmin: React.FC = () => {
           required: true,
           fetchOptions: async () => {
             const provincias = await fetchProvincias();
-            return provincias.map(p => ({
-              value: p.id,
-              label: p.nombre
-            }));
+            return provincias.map(p => ({ value: p.id, label: p.nombre }));
           }
         },
         {
-          name: 'estado_generales',
+          name: 'estado_id',
           label: 'Estado',
           type: 'select',
           placeholder: 'Selecciona un estado',
           required: true,
           fetchOptions: async () => {
             const estados = await fetchEstadosGenerales();
-            return estados.map(e => ({
-              value: e.id,
-              label: e.descripcion
-            }));
+            return estados.map(e => ({ value: e.id, label: e.descripcion }));
           }
         }
       ]}
 
-      // 🔹 Columnas que se muestran en la tabla
       columns={[
         { key: 'id', label: 'ID' },
         { key: 'nombre', label: 'Proveedor' },
@@ -96,26 +61,21 @@ const ProveedoresAdmin: React.FC = () => {
         { key: 'correo', label: 'Correo' },
         { key: 'direccion', label: 'Dirección' },
         { 
-          key: 'provincia_id', 
+          key: 'provincias', // "alias" para render
           label: 'Provincia',
-          render: (value) => (value as { nombre: string })?.nombre || 'Sin provincia',
-          exportRender: (value) => (value as { nombre: string })?.nombre || 'Sin provincia'
+          render: (_, row) => row.provincias?.nombre || 'Sin provincia',
+          exportRender: (_, row) => row.provincias?.nombre || 'Sin provincia'
         },
-
-        
         { 
-
-          key: 'estado_id',
+          key: 'estados_generales', // "alias" para render
           label: 'Estado',
-          render: (value) => (value as { descripcion: string })?.descripcion || 'Sin estado',
-          exportRender: (value) => (value as { descripcion: string })?.descripcion || 'Sin estado'
+          render: (_, row) => row.estados_generales?.descripcion || 'Sin estado',
+          exportRender: (_, row) => row.estados_generales?.descripcion || 'Sin estado'
         }
       ]}
 
-      // 🔹 Campos que se usarán en la búsqueda
       searchFields={['nombre', 'correo', 'contacto']}
 
-      // 🔹 Operaciones CRUD
       operations={{
         fetch: fetchProveedores,
         create: createProveedor,
@@ -123,7 +83,6 @@ const ProveedoresAdmin: React.FC = () => {
         delete: deleteProveedor
       }}
 
-      // 🔹 Transformación de los valores del formulario antes de enviar al backend
       getFormData={(formValues) => ({
         nombre: formValues.nombre,
         contacto: formValues.contacto,
@@ -134,7 +93,6 @@ const ProveedoresAdmin: React.FC = () => {
         estado_id: formValues.estado_id ? Number(formValues.estado_id) : null
       })}
 
-      // 🔹 Valores iniciales al abrir el formulario (editar o nuevo)
       getInitialFormData={(item) => ({
         nombre: item?.nombre || '',
         contacto: item?.contacto || '',

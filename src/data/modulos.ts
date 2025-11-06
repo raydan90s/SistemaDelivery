@@ -6,7 +6,7 @@ import ProvinciasAdmin from '@components/admin/ProvinciaAdmin';
 import CiudadesAdmin from '@components/admin/CiudadesAdmin';
 //import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
-//import IVAAdmin from './modules/IVAAdmin';
+import IVAAdmin from '@components/admin/IVAAdmin';
 import ProveedoresAdmin from '@components/admin/ProveedoresAdmin';
 
 const modules = [
@@ -64,7 +64,7 @@ const modules = [
       description: 'Porcentajes de IVA por fecha',
       icon: Percent,
       color: 'bg-red-500',
-      //component: IVAAdmin
+      component: IVAAdmin
     },
     {
       id: 'proveedores' as ModuleType,

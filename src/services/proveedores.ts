@@ -5,7 +5,6 @@ type Proveedor = Database['public']['Tables']['proveedores']['Row'];
 type ProveedorInsert = Database['public']['Tables']['proveedores']['Insert'];
 type ProveedorUpdate = Database['public']['Tables']['proveedores']['Update'];
 
-
 export type ProveedorConRelaciones = Proveedor & {
   provincias?: {
     nombre: string;
@@ -15,14 +14,13 @@ export type ProveedorConRelaciones = Proveedor & {
   };
 };
 
-
 export async function fetchProveedores() {
   const { data, error } = await supabase
     .from('proveedores')
     .select(`
       *,
-      provincias ( nombre ),
-      estados_generales ( descripcion )
+      provincias:provincia_id ( nombre ),
+      estados_generales:estado_id ( descripcion )
     `)
     .order('id', { ascending: true });
 
@@ -33,14 +31,13 @@ export async function fetchProveedores() {
   return data as ProveedorConRelaciones[];
 }
 
-
 export async function fetchProveedorById(id: number) {
   const { data, error } = await supabase
     .from('proveedores')
     .select(`
       *,
-      provincias ( nombre ),
-      estados_generales ( descripcion )
+      provincias:provincia_id ( nombre ),
+      estados_generales:estado_id ( descripcion )
     `)
     .eq('id', id)
     .single();
@@ -52,15 +49,14 @@ export async function fetchProveedorById(id: number) {
   return data as ProveedorConRelaciones;
 }
 
-
 export async function createProveedor(proveedor: ProveedorInsert) {
   const { data, error } = await supabase
     .from('proveedores')
     .insert([proveedor])
     .select(`
       *,
-      provincias ( nombre ),
-      estados_generales ( descripcion )
+      provincias:provincia_id ( nombre ),
+      estados_generales:estado_id ( descripcion )
     `)
     .single();
 
@@ -71,7 +67,6 @@ export async function createProveedor(proveedor: ProveedorInsert) {
   return data as ProveedorConRelaciones;
 }
 
-
 export async function updateProveedor(id: number, proveedor: ProveedorUpdate) {
   const { data, error } = await supabase
     .from('proveedores')
@@ -79,8 +74,8 @@ export async function updateProveedor(id: number, proveedor: ProveedorUpdate) {
     .eq('id', id)
     .select(`
       *,
-      provincias ( nombre ),
-      estados_generales ( descripcion )
+      provincias:provincia_id ( nombre ),
+      estados_generales:estado_id ( descripcion )
     `)
     .single();
 
@@ -90,7 +85,6 @@ export async function updateProveedor(id: number, proveedor: ProveedorUpdate) {
   }
   return data as ProveedorConRelaciones;
 }
-
 
 export async function deleteProveedor(id: number) {
   const { error } = await supabase
