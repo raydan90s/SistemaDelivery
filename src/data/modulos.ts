@@ -8,6 +8,8 @@ import CiudadesAdmin from '@components/admin/CiudadesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
 //import ProveedoresAdmin from './modules/ProveedoresAdmin';
+import EmpleadosAdmin from '@components/admin/EmpleadosAdmin';
+
 
 const modules = [
     {
@@ -73,7 +75,16 @@ const modules = [
       icon: Users,
       color: 'bg-indigo-500',
       //component: ProveedoresAdmin
-    }
+    },  
+    {
+      id: 'empleados' as ModuleType,
+      name: 'Empleados',
+      description: 'Gestión de Empleados',
+      icon: Users,
+      color: 'bg-indigo-500',
+      component: EmpleadosAdmin
+    },
+  
   ];
 
 export default modules;
