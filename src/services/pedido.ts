@@ -21,6 +21,8 @@ export const obtenerPedidos = async () => {
     .select(`
       *,
       clientes(
+        nombre,
+        apellido,
         celular,
         direccionescliente(direccion)
       ),
@@ -82,11 +84,11 @@ export const eliminarPedido = async (id: number) => {
   const { data, error } = await supabase
     .from('pedidos') 
     .delete()
-    .eq('id', id);  // ← cambiar .match() por .eq()
+    .eq('id', id);  
 
   if (error) {
-    console.error('Error al eliminar el pedido:', error);  // ← ver el error completo
-    throw error;  // ← lanzar el error para manejarlo mejor
+    console.error('Error al eliminar el pedido:', error); 
+    throw error;  
   }
   return data; 
 };

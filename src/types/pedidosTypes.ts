@@ -1,6 +1,8 @@
 export type Cliente = {
+  nombre: string | null;
+  apellido: string | null;
   celular: string | null;
-  direccionescliente?: DireccionCliente[] | null;  // ← AGREGAR ESTA LÍNEA
+  direccionescliente?: DireccionCliente[] | null;  
 };
 
 export type DireccionCliente = {
@@ -8,16 +10,16 @@ export type DireccionCliente = {
 };
 
 export interface Pedido {
-  id: number;  // Clave primaria
-  cliente_id: number | null;  // Clave foránea con la tabla clientes
-  fecha: string;  // Timestamp
-  total: number;  // Total del pedido
-  estado_pedido_id: number | null;  // Clave foránea con la tabla estadospedido
-  tipo_entrega_id: number | null;  // Clave foránea con la tabla tipoentrega
-  repartidor_id: number | null;  // Clave foránea con la tabla repartidores
-  estado_id: number | null;  // Clave foránea con la tabla estados_generales
+  id: number;  
+  cliente_id: number | null;  
+  fecha: string; 
+  total: number;  
+  estado_pedido_id: number | null;  
+  tipo_entrega_id: number | null;  
+  repartidor_id: number | null;  
+  estado_id: number | null;  
   clientes?: Cliente;
   direccioncliente?: DireccionCliente;
-  estadospedido?: { descripcion: string | null } | null;  // ← agregar
+  estadospedido?: { descripcion: string | null } | null;  
   tipoentrega?: { descripcion: string | null } | null; 
 }

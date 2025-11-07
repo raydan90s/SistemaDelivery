@@ -1,3 +1,9 @@
+export type Producto = {
+  nombre: string;
+  descripcion: string; 
+}
+
+
 export interface DetallePedido {
   id: number;      
   pedido_id: number | null;  

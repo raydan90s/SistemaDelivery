@@ -49,8 +49,8 @@ const EditarPedidoModal: React.FC<EditarPedidoModalProps> = ({
       });
       
       alert('Pedido actualizado correctamente');
-      onUpdate(); // Refrescar la lista
-      onClose(); // Cerrar modal
+      onUpdate(); 
+      onClose(); 
     } catch (error) {
       console.error('Error al actualizar:', error);
       alert('Error al actualizar el pedido');
@@ -60,7 +60,7 @@ const EditarPedidoModal: React.FC<EditarPedidoModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center">
       <div className="bg-white rounded-lg w-[600px] p-6 relative">
         {/* Botón cerrar */}
         <button
@@ -101,7 +101,7 @@ const EditarPedidoModal: React.FC<EditarPedidoModalProps> = ({
               <label className="block text-sm font-medium mb-2">Cliente</label>
               <input
                 type="text"
-                value={pedido.cliente_id || 'N/A'}
+                value={`${pedido.clientes?.nombre} ${pedido.clientes?.apellido}`}
                 disabled
                 className="w-full px-3 py-2 border rounded bg-gray-100 cursor-not-allowed"
               />
