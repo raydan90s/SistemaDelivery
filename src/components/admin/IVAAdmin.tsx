@@ -17,7 +17,7 @@ type IVAUpdate = Database['public']['Tables']['iva']['Update'];
 const IVAAdmin: React.FC = () => {
   return (
     <SimpleTableAdmin<IVA, IVAInsert, IVAUpdate>
-      title="IVA"
+      title="IVA "
       description="Gestión de porcentajes de IVA del sistema"
       buttonLabel="Nuevo IVA"
 
@@ -33,7 +33,7 @@ const IVAAdmin: React.FC = () => {
           name: 'fecha_aplicacion',
           label: 'Fecha de Aplicación',
           type: 'text',
-          placeholder: 'Selecciona una fecha',
+          placeholder: 'YYYY-MM-DD',
           required: true
         },
         {
