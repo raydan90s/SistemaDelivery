@@ -107,7 +107,7 @@ export async function fetchPromocionesConProductos() {
           id,
           nombre,
           descripcion,
-          precio,
+          precio_base,
           imagen_url
         )
       )
