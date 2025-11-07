@@ -10,13 +10,11 @@ const CartPage = () => {
     const [paymentSuccess, setPaymentSuccess] = useState(false);
 
     const handlePayment = () => {
-        // Aquí puedes agregar tu lógica de pago
         setPaymentSuccess(true);
         setTimeout(() => {
             clearCart();
             setShowPaymentModal(false);
             setPaymentSuccess(false);
-            // Aquí puedes redirigir o mostrar un mensaje de éxito
         }, 2000);
     };
 
