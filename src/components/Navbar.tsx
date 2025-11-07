@@ -40,10 +40,12 @@ const Navbar: React.FC = () => {
             </form>
 
             <div className="flex items-center gap-4 flex-shrink-0">
-              <button className="text-white hover:bg-primary-hover p-2 rounded-lg transition-all">
+              <button className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all">
                 <User className="w-6 h-6" />
               </button>
-              <button className="text-white hover:bg-primary-hover p-2 rounded-lg transition-all relative">
+              <button
+                onClick={() => navigate('/carrito')}
+                className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all relative">
                 <ShoppingCart className="w-6 h-6" />
                 <span className="absolute -top-1 -right-1 bg-white text-red-500 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {getTotalItems()}

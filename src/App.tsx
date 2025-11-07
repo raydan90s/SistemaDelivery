@@ -6,6 +6,7 @@ import ResultadosBusqueda from '@pages/ResultadosBusqueda';
 import Navbar from '@components/Navbar';
 import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
+import CartPage from '@pages/Carrito';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="/buscar" element={<ResultadosBusqueda/>} />
             <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
             <Route path='/admin/dashboard/:moduleId' element={<AdminDashboard/>}/>
+            <Route path='/carrito' element={<CartPage/>}/>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
