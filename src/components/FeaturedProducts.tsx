@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 import { fetchProductosDestacados } from '@services/productos';
 import { useCart } from '@hooks/useCart';
 
 const FeaturedProducts: React.FC = () => {
   const [productos, setProductos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { addToCart } = useCart();
+  const { addToCart, cartItems, updateQuantity, removeFromCart } = useCart();
+
+  // Función para obtener la cantidad de un producto en el carrito
+  const getProductQuantity = (productId: string) => {
+    const item = cartItems.find(item => item.id === productId);
+    return item ? item.quantity : 0;
+  };
 
   useEffect(() => {
     loadProductos();
@@ -72,19 +78,47 @@ const FeaturedProducts: React.FC = () => {
                   <span className="text-2xl font-bold text-primary">
                     ${producto.precio_base?.toFixed(2)}
                   </span>
-                  <button
-                    onClick={() => addToCart({
-                      id: producto.id.toString(),
-                      name: producto.nombre,
-                      price: producto.precio_base,
-                      description: producto.descripcion,
-                      image: producto.imagen_url || '',
-                      category: producto.categoria?.nombre || 'Sin categoría'
-                    })}
-                    className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110"
-                  >
-                    <Plus className="w-5 h-5" />
-                  </button>
+
+                  {getProductQuantity(producto.id.toString()) === 0 ? (
+                    <button
+                      onClick={() => addToCart({
+                        id: producto.id.toString(),
+                        name: producto.nombre,
+                        price: producto.precio_base,
+                        description: producto.descripcion,
+                        image: producto.imagen_url || '',
+                        category: producto.categoria?.nombre || 'Sin categoría'
+                      })}
+                      className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110"
+                    >
+                      <Plus className="w-5 h-5" />
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-2 bg-primary rounded-full px-2 py-1">
+                      <button
+                        onClick={() => {
+                          const quantity = getProductQuantity(producto.id.toString());
+                          if (quantity === 1) {
+                            removeFromCart(producto.id.toString());
+                          } else {
+                            updateQuantity(producto.id.toString(), quantity - 1);
+                          }
+                        }}
+                        className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="text-white font-bold min-w-[20px] text-center">
+                        {getProductQuantity(producto.id.toString())}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(producto.id.toString(), getProductQuantity(producto.id.toString()) + 1)}
+                        className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

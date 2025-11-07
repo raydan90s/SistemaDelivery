@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, ArrowLeft } from 'lucide-react';
+import { Plus, Minus, ArrowLeft } from 'lucide-react';
 import { fetchProductosPorCategoria } from '@services/productos';
 import { fetchCategoriaProductoById } from '@services/categoriasProducto';
 import { useCart } from '@hooks/useCart';
@@ -8,11 +8,17 @@ import { useCart } from '@hooks/useCart';
 const ProductosPorCategoria: React.FC = () => {
   const { categoriaId } = useParams<{ categoriaId: string }>();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems, updateQuantity, removeFromCart } = useCart();
 
   const [productos, setProductos] = useState<any[]>([]);
   const [categoria, setCategoria] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Función para obtener la cantidad de un producto en el carrito
+  const getProductQuantity = (productId: string) => {
+    const item = cartItems.find(item => item.id === productId);
+    return item ? item.quantity : 0;
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -105,19 +111,47 @@ const ProductosPorCategoria: React.FC = () => {
                     <span className="text-2xl font-bold text-primary">
                       ${producto.precio_base?.toFixed(2)}
                     </span>
-                    <button
-                      onClick={() => addToCart({
-                        id: producto.id.toString(),
-                        name: producto.nombre,
-                        price: producto.precio_base,
-                        description: producto.descripcion,
-                        image: producto.imagen_url || '',
-                        category: producto.categoria?.nombre || 'Sin categoría'
-                      })}
-                      className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110"
-                    >
-                      <Plus className="w-5 h-5" />
-                    </button>
+
+                    {getProductQuantity(producto.id.toString()) === 0 ? (
+                      <button
+                        onClick={() => addToCart({
+                          id: producto.id.toString(),
+                          name: producto.nombre,
+                          price: producto.precio_base,
+                          description: producto.descripcion,
+                          image: producto.imagen_url || '',
+                          category: producto.categoria?.nombre || 'Sin categoría'
+                        })}
+                        className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110"
+                      >
+                        <Plus className="w-5 h-5" />
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-2 bg-primary rounded-full px-2 py-1">
+                        <button
+                          onClick={() => {
+                            const quantity = getProductQuantity(producto.id.toString());
+                            if (quantity === 1) {
+                              removeFromCart(producto.id.toString());
+                            } else {
+                              updateQuantity(producto.id.toString(), quantity - 1);
+                            }
+                          }}
+                          className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="text-white font-bold min-w-[20px] text-center">
+                          {getProductQuantity(producto.id.toString())}
+                        </span>
+                        <button
+                          onClick={() => updateQuantity(producto.id.toString(), getProductQuantity(producto.id.toString()) + 1)}
+                          className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
