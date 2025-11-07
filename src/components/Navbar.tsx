@@ -1,6 +1,6 @@
 import React from 'react';
 import { UtensilsCrossed } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const navItems = ['Inicio', 'Menú', 'Ofertas', 'Contacto', 'Pedidos'];
@@ -9,11 +9,13 @@ const Navbar: React.FC = () => {
     <nav className="bg-primary shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-white">
+          <Link
+            to='/'
+            className="flex items-center gap-2 text-white hover:opacity-90 transition-opacity"
+          >
             <UtensilsCrossed className="w-8 h-8" />
             <span className="text-2xl font-bold">FoodExpress</span>
-          </div>
-
+          </Link>
           <div className="hidden md:flex gap-6">
             {navItems.map((item) => (
               <Link
