@@ -4,6 +4,7 @@ import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
 import ProvinciasAdmin from '@components/admin/ProvinciaAdmin';
 import CiudadesAdmin from '@components/admin/CiudadesAdmin';
+import gestionBodegas from '@pages/gestionBodegas';
 //import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
@@ -73,7 +74,15 @@ const modules = [
       icon: Users,
       color: 'bg-indigo-500',
       //component: ProveedoresAdmin
-    }
+    },
+    {
+      id: 'bodegas' as ModuleType,
+      name: 'Bodegas',
+      description: 'Gestión de bodegas',
+      icon: FileText,
+      color: 'bg-blue-500',
+      component: gestionBodegas
+    },
   ];
 
 export default modules;
