@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { ShoppingCart, Trash2, Plus, Minus, CreditCard, ArrowLeft } from 'lucide-react';
 import { useCart } from '@hooks/useCart';
 import { useNavigate } from "react-router-dom";
+import { crearPedido } from '@services/pedido';
+import { crearDetallePedido } from '@services/detallespedido';
+import PaymentModal from '@components/PaymentModal';
 
 const CartPage = () => {
     const navigate = useNavigate();
@@ -9,13 +12,60 @@ const CartPage = () => {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         setPaymentSuccess(true);
-        setTimeout(() => {
-            clearCart();
-            setShowPaymentModal(false);
+        
+        const nuevoPedido = {
+            cliente_id: 1, //Reemplazar con cliente context
+            fecha: new Date().toISOString(),
+            total: getTotalPrice(),
+            estado_pedido_id: 2, //En preparcion
+            tipo_entrega_id: 1, //delivery
+            repartidor_id: null,
+            estado_id: 1 //Activo
+        };
+
+        try {
+            const pedidoCreado = await crearPedido(nuevoPedido);
+
+            if (!pedidoCreado || pedidoCreado.length === 0) {
+                throw new Error('No se pudo crear el pedido');
+            }
+
+            const pedidoId = pedidoCreado[0].id;
+            console.log('Pedido creado con ID:', pedidoId);
+
+            for (const item of cartItems) {
+                const detalle = {
+                    pedido_id: pedidoId,
+                    producto_id: Number(item.id),
+                    cantidad: item.quantity,
+                    precio: item.price,
+                    subtotal: item.price * item.quantity
+                };
+                
+                const detalleCreado = await crearDetallePedido(detalle);
+                
+                if (!detalleCreado) {
+                    console.error('Error al crear detalle para producto:', item.id);
+                }
+            }
+
+            console.log('Pedido y detalles creados exitosamente');
+
+            setTimeout(() => {
+                clearCart();
+                setShowPaymentModal(false);
+                setPaymentSuccess(false);
+                navigate('/');
+            }, 2000);
+
+        } catch (error) {
+            console.error('Error al procesar el pago:', error);
+            alert('Hubo un error al procesar tu pedido. Por favor, intenta nuevamente.');
             setPaymentSuccess(false);
-        }, 2000);
+            setShowPaymentModal(false);
+        }
     };
 
     if (cartItems.length === 0) {
@@ -23,14 +73,13 @@ const CartPage = () => {
             <div className="min-h-screen bg-gray-50 py-8">
                 <div className="container mx-auto px-4">
                     <div className="max-w-4xl mx-auto">
-
                         <div className="bg-white rounded-lg shadow-md p-12 text-center">
                             <ShoppingCart className="w-24 h-24 text-gray-300 mx-auto mb-4" />
                             <h2 className="text-2xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
                             <p className="text-gray-600 mb-6">Agrega algunos productos para comenzar</p>
                             <button 
-                            onClick={()=> navigate('/')}
-                            className="cursor-pointer bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-hover transition-colors">
+                                onClick={() => navigate('/')}
+                                className="cursor-pointer bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-hover transition-colors">
                                 Explorar productos
                             </button>
                         </div>
@@ -54,6 +103,7 @@ const CartPage = () => {
                     <h1 className="text-3xl font-bold text-gray-800 mb-8">Mi Carrito</h1>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Lista de productos */}
                         <div className="lg:col-span-2 space-y-4">
                             {cartItems.map((item) => (
                                 <div key={item.id} className="bg-white rounded-lg shadow-md p-4 flex gap-4">
@@ -128,56 +178,14 @@ const CartPage = () => {
                 </div>
             </div>
 
-            {showPaymentModal && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-                        {!paymentSuccess ? (
-                            <>
-                                <h3 className="text-2xl font-bold text-gray-800 mb-4">Confirmar Pago</h3>
-                                <p className="text-gray-600 mb-6">
-                                    ¿Estás seguro que deseas proceder con el pago de <span className="font-bold text-orange-600">${getTotalPrice().toFixed(2)}</span>?
-                                </p>
-
-                                <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                                    <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-gray-600">Total de productos:</span>
-                                        <span className="font-semibold">{getTotalItems()}</span>
-                                    </div>
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-gray-600">Monto total:</span>
-                                        <span className="font-bold text-primary">${getTotalPrice().toFixed(2)}</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={() => setShowPaymentModal(false)}
-                                        className="cursor-pointer flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        onClick={handlePayment}
-                                        className="cursor-pointer flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-semibold"
-                                    >
-                                        Confirmar Pago
-                                    </button>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="text-center">
-                                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-800 mb-2">¡Pago Exitoso!</h3>
-                                <p className="text-gray-600">Procesando tu pedido...</p>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
+            <PaymentModal
+                isOpen={showPaymentModal}
+                paymentSuccess={paymentSuccess}
+                totalPrice={getTotalPrice()}
+                totalItems={getTotalItems()}
+                onClose={() => setShowPaymentModal(false)}
+                onConfirm={handlePayment}
+            />
         </div>
     );
 };
