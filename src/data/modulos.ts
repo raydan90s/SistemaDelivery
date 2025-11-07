@@ -9,6 +9,7 @@ import CiudadesAdmin from '@components/admin/CiudadesAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
 //import ProveedoresAdmin from './modules/ProveedoresAdmin';
 import EmpleadosAdmin from '@components/admin/EmpleadosAdmin';
+import TipoEmpleadosAdmin from '@components/admin/TipoEmpleadoAdmin';
 
 
 const modules = [
@@ -84,6 +85,14 @@ const modules = [
       color: 'bg-indigo-500',
       component: EmpleadosAdmin
     },
+    {
+      id: 'tipoEmpleado' as ModuleType,
+      name: 'Tipo de Empleados',
+      description: 'Gestión de Empleados',
+      icon: Settings,
+      color: 'bg-indigo-500',
+      component: TipoEmpleadosAdmin
+    }
   
   ];
 
