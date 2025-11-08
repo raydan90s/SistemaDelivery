@@ -7,11 +7,14 @@ import Navbar from '@components/Navbar';
 import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
 import CartPage from '@pages/Carrito';
+import ScrollToTop from '@components/ScrollToTop'; 
+
 
 function App() {
   return (
     <CartProvider>
       <div>
+        <ScrollToTop /> 
         <Navbar />
         <main>
           <Routes>

@@ -8,6 +8,9 @@ import PaymentModal from '@components/PaymentModal';
 import { fetchIVA } from '@services/IVA';
 import { fetchRepartidoresActivos } from '@services/repartidores';
 import type { Database } from '@models/supabase';
+import { scrollToHashOnLoad, handleScrollToTop } from '@utils/scrollUtils';
+import { useLocation } from 'react-router-dom';
+ 
 
 type Repartidor = Database['public']['Tables']['repartidores']['Row'];
 
@@ -18,6 +21,22 @@ const CartPage = () => {
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [ivaPorcentaje, setIvaPorcentaje] = useState<number | null>(null);
     const [repartidores, setRepartidores] = useState<Repartidor[]>([]);
+
+    const location = useLocation();
+
+    // Scroll al top en CADA carga/recarga
+    useEffect(() => {
+        if (location.hash) {
+            scrollToHashOnLoad();
+        } else {
+            // Forzar scroll inmediato al montar
+            window.scrollTo(0, 0);
+            // Y también smooth después de un momento
+            setTimeout(() => {
+                handleScrollToTop();
+            }, 0);
+        }
+    }, [location.pathname, location.hash]); // Agregamos pathname para que se ejecute en cada navegación
 
     useEffect(() => {
         const obtenerIVA = async () => {
@@ -33,7 +52,7 @@ const CartPage = () => {
                 }
             } catch (error) {
                 console.error('Error al obtener IVA:', error);
-                setIvaPorcentaje(15); 
+                setIvaPorcentaje(15);
             }
         };
         obtenerIVA();
@@ -44,7 +63,7 @@ const CartPage = () => {
             try {
                 const repartidoresActivos = await fetchRepartidoresActivos();
                 setRepartidores(repartidoresActivos);
-                
+
                 if (repartidoresActivos.length === 0) {
                     console.warn('⚠️ No hay repartidores activos disponibles');
                 }
@@ -76,9 +95,9 @@ const CartPage = () => {
 
     const handlePayment = async () => {
         setPaymentSuccess(true);
-        
+
         const repartidorId = seleccionarRepartidorAleatorio();
-        
+
         const nuevoPedido = {
             cliente_id: 1, //Reemplazar con cliente context
             fecha: new Date().toISOString(),
@@ -106,9 +125,9 @@ const CartPage = () => {
                     precio: item.price,
                     subtotal: item.price * item.quantity
                 };
-                
+
                 const detalleCreado = await crearDetallePedido(detalle);
-                
+
                 if (!detalleCreado) {
                     console.error('❌ Error al crear detalle para producto:', item.id);
                 }
@@ -123,15 +142,15 @@ const CartPage = () => {
 
         } catch (error: any) {
             console.error('❌ Error al procesar el pago:', error);
-            
+
             let mensajeError = 'Hubo un error al procesar tu pedido. ';
-            
+
             if (error.message && error.message.includes('pedidos_ibfk')) {
                 mensajeError += 'Verifica que todos los datos sean válidos.';
             } else {
                 mensajeError += 'Por favor, intenta nuevamente.';
             }
-            
+
             alert(mensajeError);
             setPaymentSuccess(false);
             setShowPaymentModal(false);
@@ -147,7 +166,7 @@ const CartPage = () => {
                             <ShoppingCart className="w-24 h-24 text-gray-300 mx-auto mb-4" />
                             <h2 className="text-2xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
                             <p className="text-gray-600 mb-6">Agrega algunos productos para comenzar</p>
-                            <button 
+                            <button
                                 onClick={() => navigate('/')}
                                 className="cursor-pointer bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-hover transition-colors">
                                 Explorar productos
@@ -240,7 +259,11 @@ const CartPage = () => {
                                 </div>
 
                                 <button
-                                    onClick={() => setShowPaymentModal(true)}
+                                    onClick={() => {
+                                        setShowPaymentModal(true);
+                                        handleScrollToTop();
+                                    }}
+
                                     className="cursor-pointer w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-hover transition-colors font-semibold flex items-center justify-center gap-2"
                                 >
                                     <CreditCard className="w-5 h-5" />

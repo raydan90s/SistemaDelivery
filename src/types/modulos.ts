@@ -13,4 +13,5 @@ export type ModuleType =
   | 'promociones'
   | "repartidores"
   | "tipovehiculo"
+  | 'pedidoAdmin'
   | null;
