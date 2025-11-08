@@ -1,17 +1,46 @@
-import React, { useState } from 'react';
-import { UtensilsCrossed, Search, User, ShoppingCart } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { UtensilsCrossed, Search, User, ShoppingCart, LogOut, UserCircle, LayoutDashboard } from 'lucide-react';
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from '@hooks/useCart';
+import { useAuth } from '@context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  
   const navigate = useNavigate();
   const { getTotalItems } = useCart();
+  const { user, usuarioData, signOut } = useAuth(); 
+
+  const isAdmin = usuarioData?.rol?.nombre === 'Administrador' || usuarioData?.rol?.nombre === 'Super Administrador';
+
+  useEffect(() => {
+    console.log('Usuario', usuarioData);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [usuarioData]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/buscar?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setShowUserMenu(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
     }
   };
 
@@ -40,14 +69,67 @@ const Navbar: React.FC = () => {
             </form>
 
             <div className="flex items-center gap-4 flex-shrink-0">
-              <button
-                onClick={() => navigate('/login')}
-                className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all" >
-                <User className="w-6 h-6" />
-              </button>
+              {user ? (
+                <div className="relative" ref={menuRef}>
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="cursor-pointer flex items-center gap-2 text-white hover:bg-primary-hover px-3 py-2 rounded-lg transition-all"
+                  >
+                    <User className="w-5 h-5" />
+                    <span className="font-medium">
+                      {usuarioData ? `Hola, ${usuarioData.nombre}` : 'Cargando...'}
+                    </span>
+                  </button>
+
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-200">
+                      <Link
+                        to="/perfil"
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                        onClick={() => setShowUserMenu(false)}
+                      >
+                        <UserCircle className="w-4 h-4" />
+                        <span>Mi perfil</span>
+                      </Link>
+                      
+                      {isAdmin && (
+                        <>
+                          <hr className="my-1" />
+                          <Link
+                            to="/admin/dashboard"
+                            className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                            onClick={() => setShowUserMenu(false)}
+                          >
+                            <LayoutDashboard className="w-4 h-4" />
+                            <span>Dashboard</span>
+                          </Link>
+                        </>
+                      )}
+                      
+                      <hr className="my-1" />
+                      <button
+                        onClick={handleSignOut}
+                        className="cursor-pointer w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Cerrar sesión</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => navigate('/login')}
+                  className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all"
+                >
+                  <User className="w-6 h-6" />
+                </button>
+              )}
+
               <button
                 onClick={() => navigate('/carrito')}
-                className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all relative">
+                className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all relative"
+              >
                 <ShoppingCart className="w-6 h-6" />
                 <span className="absolute -top-1 -right-1 bg-white text-red-500 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {getTotalItems()}

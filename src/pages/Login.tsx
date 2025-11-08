@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const { session, isLoading, signIn } = useAuth();
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,14 +50,25 @@ export default function LoginPage() {
           required
           className={inputTwClass}
         />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className={inputTwClass}
-        />
+        
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className={inputTwClass + " pr-10"}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
         
         <div className="text-right text-sm mt-1">
           <Link to="/forgot-password" className="text-blue-600 hover:underline">
@@ -66,7 +79,7 @@ export default function LoginPage() {
         <button 
           type="submit" 
           disabled={loading} 
-          className="w-full p-2.5 mt-4 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400"
+          className="cursor-pointer w-full p-2.5 mt-4 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400"
         >
           {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
         </button>
