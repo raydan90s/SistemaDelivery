@@ -8,7 +8,6 @@ import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
 import CartPage from '@pages/Carrito';
 import PedidosPage from '@components/Pedidos';
-import RepartidoresDemo from "@pages/RepartidoresDemo";
 
 function App() {
   return (
@@ -17,17 +16,17 @@ function App() {
         <Navbar />
         <main>
           <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/categoria/:categoriaId" element={<ProductosPorCategoria/>} />
-            <Route path="/buscar" element={<ResultadosBusqueda/>} />
-            <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
-            <Route path='/admin/dashboard/:moduleId' element={<AdminDashboard/>}/>
-            <Route path='/carrito' element={<CartPage/>}/>
+            <Route path="/" element={<Home />} />
+            <Route path="/categoria/:categoriaId" element={<ProductosPorCategoria />} />
+            <Route path="/buscar" element={<ResultadosBusqueda />} />
+            <Route path='/admin/dashboard' element={<AdminDashboard />} />
+            <Route path='/admin/dashboard/:moduleId' element={<AdminDashboard />} />
+            <Route path='/carrito' element={<CartPage />} />
             <Route path="/pedidos" element={<PedidosPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
-        <Footer/>
+        <Footer />
       </div>
     </CartProvider>
   );

@@ -16,7 +16,6 @@ import TipoEmpleadosAdmin from '@components/admin/TipoEmpleadoAdmin';
 import RepartidoresAdmin from '@components/admin/RepartidoresAdmin';
 import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
 
-
 export const  modules = [
   {
     id: 'tipodocumento' as ModuleType,

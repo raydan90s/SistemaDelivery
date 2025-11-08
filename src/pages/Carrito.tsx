@@ -6,6 +6,10 @@ import { crearPedido } from '@services/pedido';
 import { crearDetallePedido } from '@services/detallespedido';
 import PaymentModal from '@components/PaymentModal';
 import { fetchIVA } from '@services/IVA';
+import { fetchRepartidoresActivos } from '@services/repartidores';
+import type { Database } from '@models/supabase';
+
+type Repartidor = Database['public']['Tables']['repartidores']['Row'];
 
 const CartPage = () => {
     const navigate = useNavigate();
@@ -13,6 +17,7 @@ const CartPage = () => {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [ivaPorcentaje, setIvaPorcentaje] = useState<number | null>(null);
+    const [repartidores, setRepartidores] = useState<Repartidor[]>([]);
 
     useEffect(() => {
         const obtenerIVA = async () => {
@@ -34,6 +39,34 @@ const CartPage = () => {
         obtenerIVA();
     }, []);
 
+    useEffect(() => {
+        const obtenerRepartidores = async () => {
+            try {
+                const repartidoresActivos = await fetchRepartidoresActivos();
+                setRepartidores(repartidoresActivos);
+                console.log('✅ Repartidores activos disponibles:', repartidoresActivos);
+                
+                if (repartidoresActivos.length === 0) {
+                    console.warn('⚠️ No hay repartidores activos disponibles');
+                }
+            } catch (error) {
+                console.error('❌ Error al obtener repartidores:', error);
+            }
+        };
+        obtenerRepartidores();
+    }, []);
+
+    const seleccionarRepartidorAleatorio = (): number | null => {
+        if (repartidores.length === 0) {
+            console.warn('⚠️ No hay repartidores disponibles. Se creará el pedido sin repartidor asignado.');
+            return null;
+        }
+        const indiceAleatorio = Math.floor(Math.random() * repartidores.length);
+        const repartidorSeleccionado = repartidores[indiceAleatorio];
+        console.log('✅ Repartidor asignado:', repartidorSeleccionado);
+        return repartidorSeleccionado.id;
+    };
+
     const getSubtotal = () => {
         if (ivaPorcentaje === null) return getTotalPrice();
         return getTotalPrice() / (1 + ivaPorcentaje / 100);
@@ -46,15 +79,19 @@ const CartPage = () => {
     const handlePayment = async () => {
         setPaymentSuccess(true);
         
+        const repartidorId = seleccionarRepartidorAleatorio();
+        
         const nuevoPedido = {
             cliente_id: 1, //Reemplazar con cliente context
             fecha: new Date().toISOString(),
             total: getTotalPrice(),
             estado_pedido_id: 2, //En preparacion
             tipo_entrega_id: 1, //delivery
-            repartidor_id: null,
+            repartidor_id: repartidorId,
             estado_id: 1 //Activo
         };
+
+        console.log('📦 Datos del pedido a crear:', nuevoPedido);
 
         try {
             const pedidoCreado = await crearPedido(nuevoPedido);
@@ -64,7 +101,7 @@ const CartPage = () => {
             }
 
             const pedidoId = pedidoCreado[0].id;
-            console.log('Pedido creado con ID:', pedidoId);
+            console.log('✅ Pedido creado con ID:', pedidoId);
 
             for (const item of cartItems) {
                 const detalle = {
@@ -78,11 +115,11 @@ const CartPage = () => {
                 const detalleCreado = await crearDetallePedido(detalle);
                 
                 if (!detalleCreado) {
-                    console.error('Error al crear detalle para producto:', item.id);
+                    console.error('❌ Error al crear detalle para producto:', item.id);
                 }
             }
 
-            console.log('Pedido y detalles creados exitosamente');
+            console.log('✅ Pedido y detalles creados exitosamente');
 
             setTimeout(() => {
                 clearCart();
@@ -91,9 +128,18 @@ const CartPage = () => {
                 navigate('/');
             }, 2000);
 
-        } catch (error) {
-            console.error('Error al procesar el pago:', error);
-            alert('Hubo un error al procesar tu pedido. Por favor, intenta nuevamente.');
+        } catch (error: any) {
+            console.error('❌ Error al procesar el pago:', error);
+            
+            let mensajeError = 'Hubo un error al procesar tu pedido. ';
+            
+            if (error.message && error.message.includes('pedidos_ibfk')) {
+                mensajeError += 'Verifica que todos los datos sean válidos.';
+            } else {
+                mensajeError += 'Por favor, intenta nuevamente.';
+            }
+            
+            alert(mensajeError);
             setPaymentSuccess(false);
             setShowPaymentModal(false);
         }
