@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext, useContext} from 'react';
 import type { ReactNode } from 'react';
 import { supabase } from '@services/supabase';
-import type { Session, User } from '@supabase/supabase-js';
+import type { Session, User, SignInWithPasswordCredentials } from '@supabase/supabase-js';
 
 
 interface RegisterClientArgs {
@@ -18,7 +18,9 @@ export interface AuthContextType {
   session: Session | null;
   user: User | null;
   isLoading: boolean;
-  registerClient: (args: RegisterClientArgs) => Promise<void>; 
+  registerClient: (args: RegisterClientArgs) => Promise<void>;
+  signIn: (credentials: SignInWithPasswordCredentials) => Promise<void>; 
+  signOut: () => Promise<void>; 
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,7 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     if (authError) {
-      // Si hay un error, lo "lanzamos" para que el formulario lo atrape
       throw new Error(authError.message);
     }
 
@@ -83,12 +84,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // --- FUNCION LOGIN ---
+  const signIn = async (credentials: SignInWithPasswordCredentials): Promise<void> => {
+    const { error } = await supabase.auth.signInWithPassword(credentials);
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  // --- FUNCION LOGOUT ---
+  const signOut = async (): Promise<void> => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
 
   const value: AuthContextType = {
     session,
     user: session?.user || null,
     isLoading,
-    registerClient, 
+    registerClient,
+    signIn,
+    signOut, 
   };
 
   return (

@@ -70,7 +70,7 @@ export default function RegisterPage() {
 
   return (
     <div className="w-full max-w-md p-4 mx-auto my-12">
-      <h2 className="text-3xl font-bold text-center mb-6">Registro de Cliente</h2>
+      <h2 className="text-3xl font-bold text-center mb-6">Registrarse</h2>
       
       <form onSubmit={handleRegister}>
         <input
