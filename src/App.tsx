@@ -8,7 +8,7 @@ import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
 import CartPage from '@pages/Carrito';
 import PedidosPage from '@components/Pedidos';
-
+import RepartidoresDemo from "@pages/RepartidoresDemo";
 
 function App() {
   return (

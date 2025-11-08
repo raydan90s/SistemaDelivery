@@ -11,4 +11,6 @@ export type ModuleType =
   | 'productos'
   | 'categorias-producto'
   | 'promociones'
+  | "repartidores"
+  | "tipovehiculo"
   | null;

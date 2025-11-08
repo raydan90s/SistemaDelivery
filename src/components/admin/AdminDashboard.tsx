@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import modules from '@data/modulos';
+import { modules } from '@data/modulos';
 import VolverButton from '@components/Botones/AtrasButton';
 import type { ModuleType } from '@models/modulos';
 
