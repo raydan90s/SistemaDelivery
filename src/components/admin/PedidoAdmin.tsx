@@ -3,8 +3,8 @@ import { Eye } from 'lucide-react';
 import SimpleTableAdmin from './SimpleTableAdmin';
 import VerPedidoModal from './VerPedidoModal';
 import { obtenerPedidos, actualizarPedido, eliminarPedido } from '../../services/pedido';
-import { obtenerEstadosPedidoParaSelect } from '@services/estadoPedido';
-import { obtenerTiposEntregaParaSelect } from '@services/tipoEntrega';
+import { obtenerEstadosPedidoParaSelect } from '@services/estadopedido';
+import { obtenerTiposEntregaParaSelect } from '@services/tipoentrega';
 import type { PedidoConRelaciones } from '../../types/pedidosTypes';
 
 const PedidoAdmin: React.FC = () => {
