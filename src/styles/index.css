@@ -34,3 +34,30 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* === Scroll interno para los modales del panel === */
+.fixed.inset-0 > div.bg-white.rounded-xl {
+  max-height: 90vh;             /* limita la altura del modal al 90% de la ventana */
+  overflow-y: auto;             /* activa el scroll vertical */
+  scrollbar-width: thin;        /* soporte para Firefox */
+  scrollbar-color: #0a1626 #cb2b2b; /* colores personalizados (pulgar / pista) */
+}
+
+/* Scrollbar personalizada para navegadores basados en WebKit */
+.fixed.inset-0 > div.bg-white.rounded-xl::-webkit-scrollbar {
+  width: 7px;
+}
+
+.fixed.inset-0 > div.bg-white.rounded-xl::-webkit-scrollbar-track {
+  background: #cb2b2b; /* mismo color que tu tema */
+  border-radius: 10px;
+}
+
+.fixed.inset-0 > div.bg-white.rounded-xl::-webkit-scrollbar-thumb {
+  background: #0a1626; /* mismo color oscuro que ya usas */
+  border-radius: 10px;
+}
+
+.fixed.inset-0 > div.bg-white.rounded-xl::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

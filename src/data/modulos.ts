@@ -9,8 +9,8 @@ import CategoriasProductoAdmin from '@components/admin/CategoriasProductoAdmin';
 import PromocionesAdminAvanzado from '@components/admin/PromocionesAdminAvanzado';
 //import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
-//import IVAAdmin from './modules/IVAAdmin';
-//import ProveedoresAdmin from './modules/ProveedoresAdmin';
+import IVAAdmin from '@components/admin/IVAAdmin';
+import ProveedoresAdmin from '@components/admin/ProveedoresAdmin';
 
 const modules = [
     {
@@ -67,7 +67,7 @@ const modules = [
       description: 'Porcentajes de IVA por fecha',
       icon: Percent,
       color: 'bg-red-500',
-      //component: IVAAdmin
+      component: IVAAdmin
     },
     {
       id: 'proveedores' as ModuleType,
@@ -75,7 +75,7 @@ const modules = [
       description: 'Gestión de proveedores',
       icon: Users,
       color: 'bg-indigo-500',
-      //component: ProveedoresAdmin
+      component: ProveedoresAdmin
     },
     {
       id: 'productos' as ModuleType,
