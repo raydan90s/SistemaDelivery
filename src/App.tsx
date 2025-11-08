@@ -10,7 +10,6 @@ import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
 import ProtectedRouter from '@components/ProtectedRouter'; 
 import { useAuth } from '@context/AuthContext';
-import { supabase } from '@services/supabase';
 
 
 
@@ -39,7 +38,7 @@ function App() {
 
 const MainLayout = () => {
   
-  const { session } = useAuth();
+  const { session, signOut } = useAuth(); 
 
   return (
     <div>
@@ -48,7 +47,8 @@ const MainLayout = () => {
         <span>Logueado como: **{session?.user?.email}**</span>
         <button
           style={{ marginLeft: '15px' }}
-          onClick={() => supabase.auth.signOut()}
+          className='cursor-pointer'
+          onClick={() => signOut()} 
         >
           Cerrar Sesión
         </button>
