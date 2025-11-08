@@ -81,12 +81,14 @@ export default function RegisterPage() {
         <input
           type="text" placeholder="Apellido" value={apellido}
           onChange={(e) => setApellido(e.target.value)} 
+          required
           className={inputTwClass}
         />
         <input
           type="tel" 
           inputMode="numeric" 
           placeholder="Celular" value={celular}
+          required
           onChange={handleCelularChange}
           className={inputTwClass}
         />
@@ -95,6 +97,7 @@ export default function RegisterPage() {
           <select
             value={tipoDocumentoId}
             onChange={(e) => setTipoDocumentoId(e.target.value)}
+            required
             className={`${inputTwClass} flex-1`}
           >
             <option value="1">Cédula</option>
@@ -108,6 +111,7 @@ export default function RegisterPage() {
             placeholder="Nro. de Documento" value={numeroDocumento}
             onChange={handleNumeroDocumentoChange}
             className={`${inputTwClass} flex-2`}
+            required
           />
         </div>
 
