@@ -99,7 +99,6 @@ const CartPage = () => {
         const repartidorId = seleccionarRepartidorAleatorio();
 
         const nuevoPedido = {
-            id: 9, 
             cliente_id: 1, 
             fecha: new Date().toISOString(),
             total: getTotalPrice(),

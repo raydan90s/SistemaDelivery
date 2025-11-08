@@ -1,5 +1,15 @@
 import { supabase } from './supabase'; 
-import type { PedidoInsert, PedidoConRelaciones } from '../types/pedidosTypes'; // Tipo de pedido
+import type {  PedidoConRelaciones } from '../types/pedidosTypes'; // Tipo de pedido
+
+export interface PedidoInsert{
+  cliente_id: number;
+  fecha: string;
+  total: number;
+  estado_pedido_id: number;
+  tipo_entrega_id: number;
+  repartidor_id: number | null;
+  estado_id: number;
+}
 
 // Crear un nuevo pedido
 export const crearPedido = async (pedidoData: PedidoInsert) => {
@@ -22,14 +32,23 @@ export const obtenerPedidos = async () => {
     .from('pedidos') 
     .select(`
       *,
-      clientes(
-        nombre,
-        apellido,
-        celular,
-        direccionescliente(direccion)
+      clientes!cliente_id(
+        id,
+        numero_documento,
+        usuario_id,
+        usuarios!clientes_ibfk_usuario(
+          nombre,
+          apellido,
+          celular
+        ),
+        direccionescliente(
+          direccion,
+          referencias,
+          codigo_postal
+        )
       ),
-      estadospedido(descripcion),
-      tipoentrega(descripcion)
+      estadospedido!estado_pedido_id(descripcion),
+      tipoentrega!tipo_entrega_id(descripcion)
     `)
     .neq('estado_id', 2 )
     .order('id', { ascending: true });
@@ -46,14 +65,25 @@ export const obtenerPedidoPorId = async (id: number): Promise<PedidoConRelacione
     .from('pedidos') 
     .select(`
       *,
-      clientes(
-        nombre,
-        apellido, 
-        celular,
-        direccionescliente(direccion)
+      clientes!cliente_id(
+        id,
+        numero_documento,
+        usuario_id,
+        usuarios!clientes_ibfk_usuario(
+          nombre,
+          apellido,
+          celular
+        ),
+        direccionescliente(
+          direccion,
+          referencias,
+          codigo_postal,
+          ciudades(nombre),
+          provincias(nombre)
+        )
       ),
-      estadospedido(descripcion),
-      tipoentrega(descripcion),
+      estadospedido!estado_pedido_id(descripcion),
+      tipoentrega!tipo_entrega_id(descripcion),
       detallepedido(
         id,
         cantidad,
@@ -63,9 +93,9 @@ export const obtenerPedidoPorId = async (id: number): Promise<PedidoConRelacione
           nombre,
           descripcion,
           imagen_url
-          )
         )
-      `)
+      )
+    `)
     .eq('id', id)
     .single();
 
@@ -73,7 +103,7 @@ export const obtenerPedidoPorId = async (id: number): Promise<PedidoConRelacione
     console.error('Error al obtener el pedido por ID:', error.message);
     throw error;
   }
-  return data as PedidoConRelaciones; // Retorna el pedido encontrado por su ID
+  return data as unknown as PedidoConRelaciones; // Retorna el pedido encontrado por su ID
 };
 
 
