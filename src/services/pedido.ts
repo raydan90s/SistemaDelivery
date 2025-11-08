@@ -1,10 +1,10 @@
 import { supabase } from './supabase'; 
-import type { Pedido, PedidoConRelaciones } from '../types/pedidosTypes'; // Tipo de pedido
+import type { PedidoInsert, PedidoConRelaciones } from '../types/pedidosTypes'; // Tipo de pedido
 
 // Crear un nuevo pedido
-export const crearPedido = async (pedidoData: Pedido) => {
+export const crearPedido = async (pedidoData: PedidoInsert) => {
   const { data, error } = await supabase
-    .from('pedidos') 
+    .from('pedidos')
     .insert([pedidoData])
     .select();
 
@@ -12,7 +12,8 @@ export const crearPedido = async (pedidoData: Pedido) => {
     console.error('Error al crear el pedido:', error.message);
     return null;
   }
-  return data; 
+
+  return data;
 };
 
 // Obtener todos los pedidos

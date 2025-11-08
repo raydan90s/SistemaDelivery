@@ -44,7 +44,6 @@ const CartPage = () => {
             try {
                 const repartidoresActivos = await fetchRepartidoresActivos();
                 setRepartidores(repartidoresActivos);
-                console.log('✅ Repartidores activos disponibles:', repartidoresActivos);
                 
                 if (repartidoresActivos.length === 0) {
                     console.warn('⚠️ No hay repartidores activos disponibles');
@@ -63,7 +62,6 @@ const CartPage = () => {
         }
         const indiceAleatorio = Math.floor(Math.random() * repartidores.length);
         const repartidorSeleccionado = repartidores[indiceAleatorio];
-        console.log('✅ Repartidor asignado:', repartidorSeleccionado);
         return repartidorSeleccionado.id;
     };
 
@@ -91,8 +89,6 @@ const CartPage = () => {
             estado_id: 1 //Activo
         };
 
-        console.log('📦 Datos del pedido a crear:', nuevoPedido);
-
         try {
             const pedidoCreado = await crearPedido(nuevoPedido);
 
@@ -101,7 +97,6 @@ const CartPage = () => {
             }
 
             const pedidoId = pedidoCreado[0].id;
-            console.log('✅ Pedido creado con ID:', pedidoId);
 
             for (const item of cartItems) {
                 const detalle = {
@@ -118,8 +113,6 @@ const CartPage = () => {
                     console.error('❌ Error al crear detalle para producto:', item.id);
                 }
             }
-
-            console.log('✅ Pedido y detalles creados exitosamente');
 
             setTimeout(() => {
                 clearCart();
