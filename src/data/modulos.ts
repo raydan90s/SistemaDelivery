@@ -1,4 +1,4 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, Box } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
@@ -8,6 +8,7 @@ import CiudadesAdmin from '@components/admin/CiudadesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
 //import ProveedoresAdmin from './modules/ProveedoresAdmin';
+import PedidoAdmin from '@components/admin/PedidoAdmin';
 
 const modules = [
     {
@@ -73,7 +74,15 @@ const modules = [
       icon: Users,
       color: 'bg-indigo-500',
       //component: ProveedoresAdmin
-    }
-  ];
+    },
+     {
+        id: 'pedidoAdmin',  
+        name: 'Pedidos', 
+        description: 'Gestión de pedidos',
+        icon: Box,  
+        color: 'bg-blue-500', 
+        component: PedidoAdmin,  
+    },
+];
 
 export default modules;

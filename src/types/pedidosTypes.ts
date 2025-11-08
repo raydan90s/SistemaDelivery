@@ -1,3 +1,9 @@
+import type { Database } from './supabase';
+
+export type Pedido = Database['public']['Tables']['pedidos']['Row'];
+export type PedidoInsert = Database['public']['Tables']['pedidos']['Insert'];
+export type PedidoUpdate = Database['public']['Tables']['pedidos']['Update'];
+
 export type Cliente = {
   nombre: string | null;
   apellido: string | null;
@@ -9,17 +15,32 @@ export type DireccionCliente = {
   direccion: string | null;
 };
 
-export interface Pedido {
-  id: number;  
-  cliente_id: number | null;  
-  fecha: string; 
-  total: number;  
-  estado_pedido_id: number | null;  
-  tipo_entrega_id: number | null;  
-  repartidor_id: number | null;  
-  estado_id: number | null;  
+export type EstadoPedido = {
+  descripcion: string | null;
+};
+
+export type TipoEntrega = {
+  descripcion: string | null;
+};
+
+export type Producto = {
+  nombre: string | null;
+  descripcion: string | null;
+  imagen_url: string | null;
+}
+
+export type DetallePedido = {
+  id: number;
+  cantidad: number;
+  precio: number;
+  subtotal: number;
+  productos: Producto | null;
+};
+
+
+export interface PedidoConRelaciones extends Pedido {
   clientes?: Cliente;
-  direccioncliente?: DireccionCliente;
-  estadospedido?: { descripcion: string | null } | null;  
-  tipoentrega?: { descripcion: string | null } | null; 
+  estadospedido?: EstadoPedido;
+  tipoentrega?: TipoEntrega;
+  detallepedido?: DetallePedido[];
 }
