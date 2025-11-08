@@ -1,11 +1,11 @@
-import { CartProvider } from './context/CartContext';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Home from '@pages/Home';
-import Navbar from '@components/Navbar';
-import Footer from '@components/Footer';
-import AdminDashboard from '@components/admin/AdminDashboard';
-import Login from '@pages/Login'; // 👈 Importa tu página de login
-import ProtectedRoute from './ProtectedRoute'; // 👈 Importa la ruta protegida
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import AdminDashboard from './components/admin/AdminDashboard'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import ProtectedRoute from './ProtectedRoute'
+import { CartProvider } from './context/CartContext'
 
 function App() {
   return (
@@ -15,9 +15,8 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} /> {/* 👈 Nueva ruta */}
-            
-            {/* 👇 Protegemos las rutas del admin */}
+            <Route path="/login" element={<Login />} />
+
             <Route
               path="/admin/dashboard"
               element={
@@ -26,6 +25,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/admin/dashboard/:moduleId"
               element={
@@ -41,7 +41,7 @@ function App() {
         <Footer />
       </div>
     </CartProvider>
-  );
+  )
 }
 
-export default App;
+export default App
