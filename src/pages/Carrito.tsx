@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { crearPedido } from '@services/pedido';
 import { crearDetallePedido } from '@services/detallespedido';
 import PaymentModal from '@components/PaymentModal';
+import { createFactura } from '@services/facturaService';
+import { createDetalleFactura } from '@services/detalleFacturaService';
+
 
 const CartPage = () => {
     const navigate = useNavigate();
@@ -25,8 +28,10 @@ const CartPage = () => {
             estado_id: 1 //Activo
         };
 
+
         try {
             const pedidoCreado = await crearPedido(nuevoPedido);
+            
 
             if (!pedidoCreado || pedidoCreado.length === 0) {
                 throw new Error('No se pudo crear el pedido');
@@ -52,6 +57,46 @@ const CartPage = () => {
             }
 
             console.log('Pedido y detalles creados exitosamente');
+            // ======================================================= Facturación
+
+            try {
+                // 1️⃣ Crear factura
+                const nuevaFactura = {
+                    cliente_id: 1,
+                    pedido_id: pedidoId,
+                    fecha: new Date().toISOString(),
+                    total: getTotalPrice() * 1.15,
+                    estado_id: 1,
+                    metodo_pago_id: 1,
+                    iva_id: 1
+                };
+
+                // Aquí llamamos directamente y recibimos la factura creada
+                const facturaCreada = await createFactura(nuevaFactura);
+                const facturaId = facturaCreada.id;
+                console.log("✅ Factura creada con ID:", facturaId);
+
+                // 2️⃣ Crear detalles de factura
+                for (const item of cartItems) {
+                    const detalleFactura = {
+                        factura_id: facturaId,
+                        producto_nombre: item.name,
+                        cantidad: item.quantity,
+                        precio: item.price,
+                        subtotal: item.price * item.quantity
+                    };
+
+                    await createDetalleFactura(detalleFactura);
+                    console.log(`✅ Detalle creado para producto ${item.id}`);
+                }
+            } catch (error) {
+                console.error("❌ Error en la facturación:", error);
+                throw error;
+            }
+  
+
+
+        // ======================================================= Facturación
 
             setTimeout(() => {
                 clearCart();
