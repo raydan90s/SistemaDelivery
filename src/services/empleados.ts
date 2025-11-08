@@ -25,7 +25,6 @@ export async function fetchEmpleados() {
     .from('empleados')
     .select(selectQuery)
     .order('id', { ascending: true });
-    console.log('DATOS RECIBIDOS DE SUPABASE (Empleados):', data);
 
   if (error) {
     console.error('Error al obtener empleados:', error);

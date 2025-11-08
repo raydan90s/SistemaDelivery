@@ -49,15 +49,31 @@
 }
 
 .fixed.inset-0 > div.bg-white.rounded-xl::-webkit-scrollbar-track {
-  background: #cb2b2b; /* mismo color que tu tema */
+  background: #cb2b2b;
   border-radius: 10px;
 }
 
 .fixed.inset-0 > div.bg-white.rounded-xl::-webkit-scrollbar-thumb {
-  background: #0a1626; /* mismo color oscuro que ya usas */
+  background: #0a1626; 
   border-radius: 10px;
 }
 
 .fixed.inset-0 > div.bg-white.rounded-xl::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+footer,
+footer *,
+footer::before,
+footer::after,
+footer *::before,
+footer *::after {
+  background-image: none !important;
+  border-image: none !important;
+}
+
+footer::before,
+footer::after {
+  content: none !important;
+  display: none !important;
 }

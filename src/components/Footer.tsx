@@ -3,8 +3,8 @@ import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react'
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-footer text-white py-6">
-      <div className="container mx-auto px-4">
+    <footer className="bg-footer text-white py-6 relative overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4">Sobre Nosotros</h3>
@@ -37,19 +37,19 @@ const Footer: React.FC = () => {
             <div className="flex gap-4">
               <a
                 href="#"
-                className="bg-primary hover:bg-primary-hover p-3 rounded-full transition-all ease-in-out duration-300 hover:scale-110"
+                className="bg-primary hover:bg-primary-hover p-3 rounded-full transition-all ease-in-out duration-300 hover:scale-110 focus:outline-none"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
                 href="#"
-                className="bg-primary hover:bg-primary-hover p-3 rounded-full transition-all ease-in-out duration-300 hover:scale-110"
+                className="bg-primary hover:bg-primary-hover p-3 rounded-full transition-all ease-in-out duration-300 hover:scale-110 focus:outline-none"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="#"
-                className="bg-primary hover:bg-primary-hover p-3 rounded-full transition-all ease-in-out duration-300 hover:scale-110"
+                className="bg-primary hover:bg-primary-hover p-3 rounded-full transition-all ease-in-out duration-300 hover:scale-110 focus:outline-none"
               >
                 <Twitter className="w-5 h-5" />
               </a>

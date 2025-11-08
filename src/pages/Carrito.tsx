@@ -1,16 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ShoppingCart, Trash2, Plus, Minus, CreditCard, ArrowLeft } from 'lucide-react';
 import { useCart } from '@hooks/useCart';
 import { useNavigate } from "react-router-dom";
 import { crearPedido } from '@services/pedido';
 import { crearDetallePedido } from '@services/detallespedido';
 import PaymentModal from '@components/PaymentModal';
+import { fetchIVA } from '@services/IVA';
 
 const CartPage = () => {
     const navigate = useNavigate();
     const { cartItems, updateQuantity, removeFromCart, getTotalPrice, getTotalItems, clearCart } = useCart();
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [ivaPorcentaje, setIvaPorcentaje] = useState<number | null>(null);
+
+    useEffect(() => {
+        const obtenerIVA = async () => {
+            try {
+                const ivaData = await fetchIVA();
+                if (ivaData && ivaData.length > 0) {
+                    const ivaActivo = ivaData.find(iva => iva.estado_id === 1);
+                    if (ivaActivo) {
+                        setIvaPorcentaje(ivaActivo.porcentaje);
+                    } else {
+                        setIvaPorcentaje(ivaData[ivaData.length - 1].porcentaje);
+                    }
+                }
+            } catch (error) {
+                console.error('Error al obtener IVA:', error);
+                setIvaPorcentaje(15); 
+            }
+        };
+        obtenerIVA();
+    }, []);
+
+    const getSubtotal = () => {
+        if (ivaPorcentaje === null) return getTotalPrice();
+        return getTotalPrice() / (1 + ivaPorcentaje / 100);
+    };
+
+    const getIVAAmount = () => {
+        return getTotalPrice() - getSubtotal();
+    };
 
     const handlePayment = async () => {
         setPaymentSuccess(true);
@@ -19,7 +50,7 @@ const CartPage = () => {
             cliente_id: 1, //Reemplazar con cliente context
             fecha: new Date().toISOString(),
             total: getTotalPrice(),
-            estado_pedido_id: 2, //En preparcion
+            estado_pedido_id: 2, //En preparacion
             tipo_entrega_id: 1, //delivery
             repartidor_id: null,
             estado_id: 1 //Activo
@@ -153,7 +184,11 @@ const CartPage = () => {
                                 <div className="space-y-3 mb-4">
                                     <div className="flex justify-between text-gray-600">
                                         <span>Subtotal ({getTotalItems()} items)</span>
-                                        <span>${getTotalPrice().toFixed(2)}</span>
+                                        <span>${getSubtotal().toFixed(2)}</span>
+                                    </div>
+                                    <div className="flex justify-between text-gray-600">
+                                        <span>IVA ({ivaPorcentaje !== null ? ivaPorcentaje : '...'}%)</span>
+                                        <span>${getIVAAmount().toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between text-gray-600">
                                         <span>Envío</span>
