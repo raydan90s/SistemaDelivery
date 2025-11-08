@@ -9,8 +9,7 @@ export async function fetchDetallesFactura(facturaId: number) {
   const { data, error } = await supabase
     .from('detallefactura')
     .select('*')
-    .eq('factura_id', facturaId)
-    .order('id', { ascending: true });
+    .eq('factura_id', facturaId);
 
   if (error) {
     console.error('Error al obtener detalles de factura:', error);
@@ -27,26 +26,8 @@ export async function createDetalleFactura(detalle: DetalleFacturaInsert) {
     .select()
     .single();
 
-  if (error) {
-    console.error('Error al crear detalle de factura:', error);
-    throw error;
-  }
-
+  if (error) throw error;
   return data as DetalleFactura;
-}
-
-export async function createDetallesFacturaBatch(detalles: DetalleFacturaInsert[]) {
-  const { data, error } = await supabase
-    .from('detallefactura')
-    .insert(detalles)
-    .select();
-
-  if (error) {
-    console.error('Error al crear detalles de factura:', error);
-    throw error;
-  }
-
-  return data as DetalleFactura[];
 }
 
 export async function updateDetalleFactura(id: number, detalle: DetalleFacturaUpdate) {
@@ -57,11 +38,7 @@ export async function updateDetalleFactura(id: number, detalle: DetalleFacturaUp
     .select()
     .single();
 
-  if (error) {
-    console.error('Error al actualizar detalle de factura:', error);
-    throw error;
-  }
-
+  if (error) throw error;
   return data as DetalleFactura;
 }
 
@@ -71,15 +48,6 @@ export async function deleteDetalleFactura(id: number) {
     .delete()
     .eq('id', id);
 
-  if (error) {
-    console.error('Error al eliminar detalle de factura:', error);
-    throw error;
-  }
-
+  if (error) throw error;
   return true;
-}
-
-// Helper para calcular subtotal
-export function calcularSubtotal(cantidad: number, precio: number): number {
-  return cantidad * precio;
 }

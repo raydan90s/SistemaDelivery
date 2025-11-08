@@ -13,11 +13,11 @@ export async function fetchFacturas() {
     .from('factura')
     .select(`
       *,
-      cliente:clientes(id, nombre, apellido, numero_documento),
-      metodo_pago:metodopago(id, descripcion),
-      iva:iva(id, porcentaje),
-      pedido:pedidos(id),
-      estado:estados_generales(id, descripcion)
+      cliente:clientes (id, nombre, apellido, numero_documento),
+      metodopago (id, descripcion),
+      iva (id, porcentaje),
+      pedidos (id),
+      estados_generales (id, descripcion)
     `)
     .order('fecha', { ascending: false });
 
@@ -29,27 +29,52 @@ export async function fetchFacturas() {
   return data as any[];
 }
 
+
 export async function fetchFacturaById(id: number) {
-  const { data, error } = await supabase
+  // Obtener la factura general
+  const { data: factura, error: errorFactura } = await supabase
     .from('factura')
-    .select(`
-      *,
-      cliente:clientes(id, nombre, apellido, numero_documento),
-      metodo_pago:metodopago(id, descripcion),
-      iva:iva(id, porcentaje),
-      pedido:pedidos(id),
-      estado:estados_generales(id, descripcion)
-    `)
+    .select('*')
     .eq('id', id)
     .single();
 
-  if (error) {
-    console.error('Error al obtener factura:', error);
-    throw error;
+  if (errorFactura) {
+    console.error('Error al obtener factura:', errorFactura);
+    throw errorFactura;
   }
 
-  return data;
+  // Obtener los detalles de esa factura
+  const { data: detalles, error: errorDetalles } = await supabase
+    .from('detallefactura')
+    .select('*')
+    .eq('factura_id', id);
+
+  if (errorDetalles) {
+    console.error('Error al obtener detalles de factura:', errorDetalles);
+    throw errorDetalles;
+  }
+
+  // Obtener el cliente asociado
+  let cliente = null;
+  if (factura.cliente_id) {
+    const { data: clienteData, error: errorCliente } = await supabase
+      .from('clientes')
+      .select('nombre, apellido, numero_documento')
+      .eq('id', factura.cliente_id)
+      .single();
+
+    if (errorCliente) {
+      console.warn('No se pudo obtener el cliente:', errorCliente);
+    } else {
+      cliente = clienteData;
+    }
+  }
+
+  
+  return { ...factura, cliente, detallefactura: detalles || [] };
 }
+
+
 
 export async function createFactura(factura: FacturaInsert) {
   const { data, error } = await supabase
@@ -83,6 +108,7 @@ export async function updateFactura(id: number, factura: FacturaUpdate) {
 }
 
 export async function deleteFactura(id: number) {
+  // Soft delete (estado inactivo)
   const { error } = await supabase
     .from('factura')
     .update({ estado_id: ESTADO_INACTIVO })

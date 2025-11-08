@@ -4,6 +4,8 @@ import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
 import ProvinciasAdmin from '@components/admin/ProvinciaAdmin';
 import CiudadesAdmin from '@components/admin/CiudadesAdmin';
+import Factura from '@components/admin/Factura';
+
 //import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
@@ -73,7 +75,17 @@ const modules = [
       icon: Users,
       color: 'bg-indigo-500',
       //component: ProveedoresAdmin
-    }
+    },
+
+    {
+    id: 'facturacion' as ModuleType,
+    name: 'Facturación',
+    description: 'Gestión de facturas y detalles',
+    icon: FileText,
+    color: 'bg-primary hover:bg-primary-hover', 
+    component: Factura, 
+    },
+
   ];
 
 export default modules;
