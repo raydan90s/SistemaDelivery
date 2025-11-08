@@ -1,4 +1,4 @@
-import React, { createContext, useState} from 'react';
+import React, { createContext, useState, useEffect} from 'react';
 import type { ReactNode } from 'react';
 import type { Product, CartItem } from '@models/index';
 
@@ -18,8 +18,38 @@ interface CartProviderProps {
   children: ReactNode;
 }
 
+const CART_STORAGE_KEY = 'foodexpress_cart';
+
+// Función para cargar el carrito desde localStorage
+const loadCartFromStorage = (): CartItem[] => {
+  try {
+    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+    if (storedCart) {
+      return JSON.parse(storedCart);
+    }
+  } catch (error) {
+    console.error('Error al cargar carrito desde localStorage:', error);
+  }
+  return [];
+};
+
+// Función para guardar el carrito en localStorage
+const saveCartToStorage = (cartItems: CartItem[]) => {
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+  } catch (error) {
+    console.error('Error al guardar carrito en localStorage:', error);
+  }
+};
+
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  // Inicializar el estado con los datos del localStorage
+  const [cartItems, setCartItems] = useState<CartItem[]>(loadCartFromStorage);
+
+  // Guardar en localStorage cada vez que el carrito cambie
+  useEffect(() => {
+    saveCartToStorage(cartItems);
+  }, [cartItems]);
 
   const addToCart = (product: Product) => {
     setCartItems((prevItems) => {
