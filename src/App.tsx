@@ -11,8 +11,6 @@ import AdminDashboard from '@components/admin/AdminDashboard';
 import ProtectedRouter from '@components/ProtectedRouter'; 
 import { useAuth } from '@context/AuthContext';
 
-
-
 function App() {
   return (
     <AuthProvider>
