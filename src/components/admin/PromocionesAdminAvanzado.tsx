@@ -9,7 +9,7 @@ import {
   deletePromocion
 } from '@services/promociones';
 import { fetchProductos } from '@services/productos';
-import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 import {
   fetchProductosPorPromocion,
   addProductoToPromocion,

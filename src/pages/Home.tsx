@@ -3,7 +3,6 @@ import Hero from '@components/Hero';
 import Categories from '@components/Categories';
 import Promociones from '@components/Promociones';
 import FeaturedProducts from '@components/FeaturedProducts';
-import FloatingCartButton from '@components/FloatingCartButton';
 
 const Home: React.FC = () => {
   return (
@@ -12,7 +11,6 @@ const Home: React.FC = () => {
       <Categories />
       <Promociones />
       <FeaturedProducts />
-      <FloatingCartButton />
     </div>
   );
 };

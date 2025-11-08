@@ -103,11 +103,13 @@ export async function fetchPromocionesConProductos() {
       *,
       estado:estados_generales(id, descripcion),
       promocionesproductos(
+        id,
+        cantidad,
         producto:productos(
           id,
           nombre,
           descripcion,
-          precio,
+          precio_base,
           imagen_url
         )
       )

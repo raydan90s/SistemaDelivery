@@ -7,25 +7,27 @@ import Navbar from '@components/Navbar';
 import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
 import CartPage from '@pages/Carrito';
+import ScrollToTop from '@components/ScrollToTop'; 
 
 
 function App() {
   return (
     <CartProvider>
       <div>
+        <ScrollToTop /> 
         <Navbar />
         <main>
           <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/categoria/:categoriaId" element={<ProductosPorCategoria/>} />
-            <Route path="/buscar" element={<ResultadosBusqueda/>} />
-            <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
-            <Route path='/admin/dashboard/:moduleId' element={<AdminDashboard/>}/>
-            <Route path='/carrito' element={<CartPage/>}/>
+            <Route path="/" element={<Home />} />
+            <Route path="/categoria/:categoriaId" element={<ProductosPorCategoria />} />
+            <Route path="/buscar" element={<ResultadosBusqueda />} />
+            <Route path='/admin/dashboard' element={<AdminDashboard />} />
+            <Route path='/admin/dashboard/:moduleId' element={<AdminDashboard />} />
+            <Route path='/carrito' element={<CartPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
-        <Footer/>
+        <Footer />
       </div>
     </CartProvider>
   );

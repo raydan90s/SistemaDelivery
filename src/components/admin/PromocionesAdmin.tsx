@@ -6,7 +6,7 @@ import {
   updatePromocion,
   deletePromocion
 } from '@services/promociones';
-import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 import type { Database } from '@models/supabase';
 
 type Promocion = Database['public']['Tables']['promociones']['Row'];
