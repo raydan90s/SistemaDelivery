@@ -4,6 +4,7 @@ import { AuthProvider } from '@context/AuthContext';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom'; 
 import Home from '@pages/Home';
 import LoginPage from '@pages/Login';
+import RegisterPage from '@pages/Register';
 import Navbar from '@components/Navbar';
 import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route element={<ProtectedRouter />}>
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home/>} />
