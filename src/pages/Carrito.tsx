@@ -16,13 +16,14 @@ const CartPage = () => {
         setPaymentSuccess(true);
         
         const nuevoPedido = {
-            cliente_id: 1, //Reemplazar con cliente context
+            id: 9, 
+            cliente_id: 1, 
             fecha: new Date().toISOString(),
             total: getTotalPrice(),
-            estado_pedido_id: 2, //En preparcion
-            tipo_entrega_id: 1, //delivery
-            repartidor_id: null,
-            estado_id: 1 //Activo
+            estado_pedido_id: 2,
+            tipo_entrega_id: 1, 
+            repartidor_id: 3,
+            estado_id: 1 
         };
 
         try {
