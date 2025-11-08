@@ -1,7 +1,7 @@
-import React from 'react';
-import { Plus } from 'lucide-react';
-import { products } from '@data/products';
-import { useCart } from '@hooks/useCart';
+import React from "react";
+import { Plus } from "lucide-react";
+import { products } from "@data/products";
+import { useCart } from "@hooks/useCart";
 
 const FeaturedProducts: React.FC = () => {
   const { addToCart } = useCart();
@@ -31,7 +31,9 @@ const FeaturedProducts: React.FC = () => {
                 <h3 className="text-xl font-semibold text-text-dark mb-2">
                   {product.name}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">{product.description}</p>
+                <p className="text-sm text-gray-600 mb-4">
+                  {product.description}
+                </p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-color-primary">
                     ${product.price.toFixed(2)}
