@@ -26,6 +26,7 @@ interface Column<T> {
   label: string;
   render?: (value: any, item: T) => React.ReactNode;
   exportRender?: (value: any, item: T) => string | number;
+  excludeFromExport?: boolean;
 }
 
 interface SimpleTableAdminProps<T extends { id: number }, TInsert, TUpdate> {
@@ -40,6 +41,8 @@ interface SimpleTableAdminProps<T extends { id: number }, TInsert, TUpdate> {
   getInitialFormData: (item?: T) => Record<string, any>;
   enableExport?: boolean;
   exportFilename?: string;
+  hideCreateButton?: boolean;
+  customActions?: (item: T) => React.ReactNode;
 }
 
 function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
@@ -53,7 +56,9 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   getFormData,
   getInitialFormData,
   enableExport = true,
-  exportFilename
+  exportFilename,
+  hideCreateButton = false,
+  customActions
 }: SimpleTableAdminProps<T, TInsert, TUpdate>) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
@@ -178,20 +183,22 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   });
 
   // Preparar columnas para exportación
-  const exportColumns = columns.map(col => ({
-    key: String(col.key),
-    label: col.label,
-    render: col.exportRender || ((value: any, item: T) => {
-      if (col.render) {
-        const rendered = col.render(value, item);
-        if (typeof rendered === 'string' || typeof rendered === 'number') {
-          return rendered;
+  const exportColumns = columns
+    .filter(col => !col.excludeFromExport)
+    .map(col => ({
+      key: String(col.key),
+      label: col.label,
+      render: col.exportRender || ((value: any, item: T) => {
+        if (col.render) {
+          const rendered = col.render(value, item);
+          if (typeof rendered === 'string' || typeof rendered === 'number') {
+            return rendered;
+          }
+          return String(value ?? '');
         }
         return String(value ?? '');
-      }
-      return String(value ?? '');
-    })
-  }));
+      })
+    }));
 
   if (loading) {
     return (
@@ -229,7 +236,9 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
               data={filteredData}
             />
           )}
-          <NuevoButton label={buttonLabel} onClick={() => handleOpenModal()} />
+          {!hideCreateButton && ( 
+            <NuevoButton label={buttonLabel} onClick={() => handleOpenModal()} />
+          )}
         </div>
       </div>
 
@@ -268,6 +277,7 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
                     </td>
                   ))}
                   <td className="px-6 py-4 text-right">
+                    {customActions && customActions(item)}
                     <button
                       onClick={() => handleOpenModal(item)}
                       className="cursor-pointer text-blue-600 hover:text-blue-800 mr-3 transition-colors inline-block"

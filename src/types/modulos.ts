@@ -1,5 +1,5 @@
 
-export type ModuleType = 
+export type ModuleType =
   | 'tipodocumento'
   | 'unidadmedida'
   | 'provincias'
@@ -9,4 +9,10 @@ export type ModuleType =
   | 'metodopago'
   | 'iva'
   | 'proveedores'
+  | 'productos'
+  | 'categorias-producto'
+  | 'promociones'
+  | "repartidores"
+  | "tipovehiculo"
+  | 'pedidoAdmin'
   | null;

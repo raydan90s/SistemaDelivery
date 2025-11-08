@@ -691,6 +691,7 @@ export type Database = {
           descripcion: string | null
           estado_id: number | null
           id: number
+          imagen_url: string | null
           nombre: string
           precio_base: number
           stock_minimo: number | null
@@ -701,6 +702,7 @@ export type Database = {
           descripcion?: string | null
           estado_id?: number | null
           id?: number
+          imagen_url?: string | null
           nombre: string
           precio_base: number
           stock_minimo?: number | null
@@ -711,6 +713,7 @@ export type Database = {
           descripcion?: string | null
           estado_id?: number | null
           id?: number
+          imagen_url?: string | null
           nombre?: string
           precio_base?: number
           stock_minimo?: number | null
@@ -748,6 +751,7 @@ export type Database = {
           fecha_fin: string | null
           fecha_inicio: string | null
           id: number
+          imagen_url: string | null
           nombre: string
         }
         Insert: {
@@ -757,6 +761,7 @@ export type Database = {
           fecha_fin?: string | null
           fecha_inicio?: string | null
           id?: number
+          imagen_url?: string | null
           nombre: string
         }
         Update: {
@@ -766,6 +771,7 @@ export type Database = {
           fecha_fin?: string | null
           fecha_inicio?: string | null
           id?: number
+          imagen_url?: string | null
           nombre?: string
         }
         Relationships: [
