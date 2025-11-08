@@ -38,7 +38,7 @@ const FeaturedProducts: React.FC = () => {
                   </span>
                   <button
                     onClick={() => addToCart(product)}
-                    className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110"
+                    className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110 cursor-pointer"
                   >
                     <Plus className="w-5 h-5" />
                   </button>

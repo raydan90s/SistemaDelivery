@@ -4,6 +4,7 @@ export type ModuleType =
   | 'unidadmedida'
   | 'provincias'
   | 'ciudades'
+  | 'clientes'
   | 'estados'
   | 'metodopago'
   | 'iva'

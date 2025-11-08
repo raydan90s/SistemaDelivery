@@ -1,9 +1,10 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, UserCircle } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
 import ProvinciasAdmin from '@components/admin/ProvinciaAdmin';
 import CiudadesAdmin from '@components/admin/CiudadesAdmin';
+import ClientesAdmin from '@components/admin/ClientesAdmin';
 //import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
@@ -41,6 +42,14 @@ const modules = [
       icon: Building2,
       color: 'bg-orange-500',
       component: CiudadesAdmin
+    },
+    {
+      id: 'clientes' as ModuleType,
+      name: 'Clientes',
+      description: 'Clientes registrados en el sistema',
+      icon: UserCircle,
+      color: 'bg-teal-500',
+      component: ClientesAdmin
     },
     {
       id: 'estados' as ModuleType,

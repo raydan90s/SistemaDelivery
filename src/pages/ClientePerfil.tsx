@@ -28,9 +28,8 @@ const ClientePerfil: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-primary mb-2">Mi Cuenta</h1>
           <p className="text-gray-600 text-lg">
@@ -48,7 +47,7 @@ const ClientePerfil: React.FC = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-                    flex items-center gap-2 px-6 py-4 font-medium transition-all
+                    flex items-center gap-2 px-6 py-4 font-medium transition-all cursor-pointer
                     ${
                       isActive
                         ? 'text-primary border-b-2 border-primary bg-white'

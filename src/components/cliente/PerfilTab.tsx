@@ -30,7 +30,6 @@ const PerfilTab: React.FC = () => {
   };
 
   const handleSave = () => {
-    console.log('Guardando datos:', formData);
     setIsEditing(false);
   };
 
@@ -52,7 +51,7 @@ const PerfilTab: React.FC = () => {
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors cursor-pointer"
           >
             <Edit2 className="w-4 h-4" />
             <span>Editar</span>
@@ -61,14 +60,14 @@ const PerfilTab: React.FC = () => {
           <div className="flex gap-2">
             <button
               onClick={handleCancel}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
               <span>Cancelar</span>
             </button>
             <button
               onClick={handleSave}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>Guardar</span>

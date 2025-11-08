@@ -55,7 +55,7 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({
       <button
         onClick={() => setShowMenu(!showMenu)}
         disabled={exporting || data.length === 0}
-        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
         <Download className="w-5 h-5" />
         {exporting ? 'Exportando...' : 'Exportar'}
@@ -74,7 +74,7 @@ const ExportButtons: React.FC<ExportButtonsProps> = ({
                 <button
                   key={option.format}
                   onClick={() => handleExport(option.format)}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left cursor-pointer"
                 >
                   <Icon className={`w-5 h-5 ${option.color}`} />
                   <span className="text-gray-700 font-medium">{option.label}</span>
