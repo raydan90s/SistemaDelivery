@@ -40,7 +40,9 @@ const Navbar: React.FC = () => {
             </form>
 
             <div className="flex items-center gap-4 flex-shrink-0">
-              <button className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all">
+              <button
+                onClick={() => navigate('/login')}
+                className="cursor-pointer text-white hover:bg-primary-hover p-2 rounded-lg transition-all" >
                 <User className="w-6 h-6" />
               </button>
               <button

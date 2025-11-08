@@ -1,4 +1,4 @@
-import React, { act, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { modules, moduleCategories, getModulesByCategory } from '@data/modulos';
 import VolverButton from '@components/Botones/AtrasButton';
