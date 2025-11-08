@@ -41,6 +41,8 @@ interface SimpleTableAdminProps<T extends { id: number }, TInsert, TUpdate> {
   getInitialFormData: (item?: T) => Record<string, any>;
   enableExport?: boolean;
   exportFilename?: string;
+  hideCreateButton?: boolean;
+  customActions?: (item: T) => React.ReactNode;
 }
 
 function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
@@ -54,7 +56,9 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   getFormData,
   getInitialFormData,
   enableExport = true,
-  exportFilename
+  exportFilename,
+  hideCreateButton = false,
+  customActions
 }: SimpleTableAdminProps<T, TInsert, TUpdate>) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
@@ -232,7 +236,9 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
               data={filteredData}
             />
           )}
-          <NuevoButton label={buttonLabel} onClick={() => handleOpenModal()} />
+          {!hideCreateButton && ( 
+            <NuevoButton label={buttonLabel} onClick={() => handleOpenModal()} />
+          )}
         </div>
       </div>
 
@@ -271,6 +277,7 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
                     </td>
                   ))}
                   <td className="px-6 py-4 text-right">
+                    {customActions && customActions(item)}
                     <button
                       onClick={() => handleOpenModal(item)}
                       className="cursor-pointer text-blue-600 hover:text-blue-800 mr-3 transition-colors inline-block"

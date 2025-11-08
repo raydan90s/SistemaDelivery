@@ -1,4 +1,4 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Truck, Car } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Truck, Car, Box } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
@@ -15,6 +15,8 @@ import EmpleadosAdmin from '@components/admin/EmpleadosAdmin';
 import TipoEmpleadosAdmin from '@components/admin/TipoEmpleadoAdmin';
 import RepartidoresAdmin from '@components/admin/RepartidoresAdmin';
 import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
+import PedidoAdmin from '@components/admin/PedidoAdmin';
+
 
 export const  modules = [
   {
@@ -137,5 +139,13 @@ export const  modules = [
     color: "bg-cyan-500",
     component: TipoVehiculoAdmin,
   },
+  {
+        id: 'pedidoAdmin',  
+        name: 'Pedidos', 
+        description: 'Gestión de pedidos',
+        icon: Box,  
+        color: 'bg-blue-500', 
+        component: PedidoAdmin,  
+    },
+]
 
-];

@@ -7,7 +7,6 @@ import Navbar from '@components/Navbar';
 import Footer from '@components/Footer';
 import AdminDashboard from '@components/admin/AdminDashboard';
 import CartPage from '@pages/Carrito';
-import PedidosPage from '@components/Pedidos';
 
 function App() {
   return (
@@ -22,7 +21,6 @@ function App() {
             <Route path='/admin/dashboard' element={<AdminDashboard />} />
             <Route path='/admin/dashboard/:moduleId' element={<AdminDashboard />} />
             <Route path='/carrito' element={<CartPage />} />
-            <Route path="/pedidos" element={<PedidosPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
