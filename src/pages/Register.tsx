@@ -3,21 +3,21 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
 
 export default function RegisterPage() {
-    const { registerClient } = useAuth();
+  const { registerClient } = useAuth();
 
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [nombre, setNombre] = useState('');
-    const [apellido, setApellido] = useState('');
-    const [celular, setCelular] = useState('');
-    const [tipoDocumentoId, setTipoDocumentoId] = useState('1');
-    const [numeroDocumento, setNumeroDocumento] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [celular, setCelular] = useState('');
+  const [tipoDocumentoId, setTipoDocumentoId] = useState('1');
+  const [numeroDocumento, setNumeroDocumento] = useState('');
 
-    const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -42,6 +42,29 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+    // ------------------------------------ VALIDACIONES DINÁMICAS
+  const handleCelularChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^[0-9]*$/.test(value)) {
+      setCelular(value);
+    }
+  };
+  const handleNumeroDocumentoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // VALDACION CEDULA Y RUC
+    if (tipoDocumentoId === '1' || tipoDocumentoId === '2') {
+      if (/^[0-9]*$/.test(value)) {
+        setNumeroDocumento(value);
+      }
+    } else { 
+      // VALIDACION PASAPORTE Y CARTA ANDINA
+      if (/^[a-zA-Z0-9]*$/.test(value)) {
+        setNumeroDocumento(value.toUpperCase());
+      }
+    }
+  };
+  // ------------------------------------
 
   const inputTwClass = "w-full p-2 my-1.5 rounded-md border border-gray-300";
 
@@ -61,8 +84,10 @@ export default function RegisterPage() {
           className={inputTwClass}
         />
         <input
-          type="tel" placeholder="Celular" value={celular}
-          onChange={(e) => setCelular(e.target.value)} 
+          type="tel" 
+          inputMode="numeric" 
+          placeholder="Celular" value={celular}
+          onChange={handleCelularChange}
           className={inputTwClass}
         />
         
@@ -78,8 +103,10 @@ export default function RegisterPage() {
             <option value="4">Carta Andina</option>
           </select>
           <input
-            type="text" placeholder="Nro. de Documento" value={numeroDocumento}
-            onChange={(e) => setNumeroDocumento(e.target.value)}
+            type="text" 
+            inputMode={tipoDocumentoId === '1' || tipoDocumentoId === '2' ? 'numeric' : 'text'} 
+            placeholder="Nro. de Documento" value={numeroDocumento}
+            onChange={handleNumeroDocumentoChange}
             className={`${inputTwClass} flex-2`}
           />
         </div>
@@ -105,15 +132,12 @@ export default function RegisterPage() {
           {loading ? 'Creando cuenta...' : 'Registrarse'}
         </button>
 
-        {/* Traducido de: style={{ color: 'red', ... }} */}
         {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
         {message && <p className="text-green-500 text-sm text-center mt-2">{message}</p>}
       </form>
 
-      {/* Traducido de: style={{ textAlign: 'center', ... }} */}
       <p className="text-center mt-4">
         ¿Ya tienes una cuenta? 
-        {/* Le añadí un estilo al enlace */}
         <Link to="/login" className="text-blue-600 hover:underline ml-1">
           Inicia sesión
         </Link>
