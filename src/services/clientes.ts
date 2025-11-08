@@ -1,6 +1,6 @@
 import { supabase } from '@services/supabase';
 import type { Database } from '@models/supabase';
-import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 
 type Cliente = Database['public']['Tables']['clientes']['Row'];
 type ClienteInsert = Database['public']['Tables']['clientes']['Insert'];

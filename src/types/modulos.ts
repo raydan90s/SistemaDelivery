@@ -15,4 +15,7 @@ export type ModuleType =
   | "repartidores"
   | "tipovehiculo"
   | 'pedidoAdmin'
+  | 'empleados'
+  | 'tipoEmpleado'
+  | 'facturacion'
   | null;

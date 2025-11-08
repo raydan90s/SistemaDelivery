@@ -7,7 +7,7 @@ import {
   deleteCliente
 } from '@services/clientes';
 import { fetchTipoDocumentos } from '@services/tipoDocumento';
-import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 import { fetchTipoClientes } from '@services/tipoCliente';
 import type { Database } from '@models/supabase';
 
