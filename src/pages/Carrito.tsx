@@ -60,7 +60,7 @@ const CartPage = () => {
             // ======================================================= Facturación
 
             try {
-                // 1️⃣ Crear factura
+                // crear fact
                 const nuevaFactura = {
                     cliente_id: 1,
                     pedido_id: pedidoId,
@@ -71,12 +71,12 @@ const CartPage = () => {
                     iva_id: 1
                 };
 
-                // Aquí llamamos directamente y recibimos la factura creada
+                
                 const facturaCreada = await createFactura(nuevaFactura);
                 const facturaId = facturaCreada.id;
                 console.log("✅ Factura creada con ID:", facturaId);
 
-                // 2️⃣ Crear detalles de factura
+                // crear detalles de fact
                 for (const item of cartItems) {
                     const detalleFactura = {
                         factura_id: facturaId,
@@ -87,10 +87,10 @@ const CartPage = () => {
                     };
 
                     await createDetalleFactura(detalleFactura);
-                    console.log(`✅ Detalle creado para producto ${item.id}`);
+                    
                 }
             } catch (error) {
-                console.error("❌ Error en la facturación:", error);
+                
                 throw error;
             }
   

@@ -36,7 +36,7 @@ export default function Factura() {
       .includes(search.toLowerCase())
   );
 
-  // Columnas para exportar
+  
   const columnasReporte = [
     { key: "id", label: "ID" },
     {

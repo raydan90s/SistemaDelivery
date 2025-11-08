@@ -44,7 +44,7 @@ export async function fetchFacturaById(id: number) {
     throw errorFactura;
   }
 
-  // Obtener los detalles de esa factura
+  // Obtener detalles la fact
   const { data: detalles, error: errorDetalles } = await supabase
     .from('detallefactura')
     .select('*')
@@ -55,7 +55,7 @@ export async function fetchFacturaById(id: number) {
     throw errorDetalles;
   }
 
-  // Obtener el cliente asociado
+  // Obtener el cliente 
   let cliente = null;
   if (factura.cliente_id) {
     const { data: clienteData, error: errorCliente } = await supabase
@@ -109,7 +109,7 @@ export async function updateFactura(id: number, factura: FacturaUpdate) {
 }
 
 export async function deleteFactura(id: number) {
-  // Soft delete (estado inactivo)
+  // Elimnar con estado inactivo
   const { error } = await supabase
     .from('factura')
     .update({ estado_id: ESTADO_INACTIVO })
@@ -154,18 +154,18 @@ export async function guardarFacturaCompleta(datos: GuardarFacturaInput) {
   } = datos;
 
   try {
-    // 1️⃣ Calcular subtotal, IVA y total
+    // Calcular subtotal, IVA y total
     const subtotal = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    const ivaPorcentaje = 0.15; // Ajusta si tu IVA cambia
+    const ivaPorcentaje = 0.15; 
     const montoIva = subtotal * ivaPorcentaje;
     const total = subtotal + montoIva;
 
-    console.log("Calculando factura:", { subtotal, montoIva, total });
+    
 
-    // 2️⃣ Crear factura
+    // Crear factura
     const nuevaFactura: FacturaInsert = {
       cliente_id,
       pedido_id,
@@ -192,9 +192,9 @@ export async function guardarFacturaCompleta(datos: GuardarFacturaInput) {
     }
 
     const facturaId = facturaCreada.id;
-    console.log("✅ Factura creada con ID:", facturaId);
+    
 
-    // 3️⃣ Crear detalles de factura
+    // Crear detalles de factura
     const detallesCreados = [];
 
     for (const item of cartItems) {
@@ -209,17 +209,15 @@ export async function guardarFacturaCompleta(datos: GuardarFacturaInput) {
       try {
         const detalleCreado = await createDetalleFactura(detalleFactura);
         detallesCreados.push(detalleCreado);
-        console.log(`✅ Detalle creado para producto ${item.id}`);
+        
       } catch (error) {
         console.error(`❌ Error al crear detalle para producto ${item.id}:`, error);
       }
     }
 
-    console.log(
-      `✅ Factura completa guardada: ${detallesCreados.length} detalles creados`
-    );
+    
 
-    // 4️⃣ Retornar resumen
+    // Retornar resumen
     return {
       factura: facturaCreada as Factura,
       detalles: detallesCreados,
