@@ -11,13 +11,20 @@ import { fetchTipoDocumentos } from '@services/tipoDocumento';
 import { fetchTipoClientes } from '@services/tipoCliente';
 import type { Database } from '@models/supabase';
 
-type Cliente = Database['public']['Tables']['clientes']['Row'];
 type ClienteInsert = Database['public']['Tables']['clientes']['Insert'];
 type ClienteUpdate = Database['public']['Tables']['clientes']['Update'];
 
+type ClienteInsertWithAuth = ClienteInsert & {
+  nombre: string;
+  apellido?: string;
+  celular?: string;
+  email: string;
+  password: string;
+};
+
 const ClientesAdmin: React.FC = () => {
   return (
-    <SimpleTableAdmin<ClienteConRelaciones, ClienteInsert, ClienteUpdate>
+    <SimpleTableAdmin<ClienteConRelaciones, ClienteInsertWithAuth, ClienteUpdate>
       title="Clientes"
       description="Gestiona los clientes registrados en el sistema"
       buttonLabel="Nuevo Cliente"
@@ -145,9 +152,12 @@ const ClientesAdmin: React.FC = () => {
       
       operations={{
         fetch: fetchClientes,
-        create: createCliente,
+        create: createCliente as any,
         update: updateCliente,
-        delete: deleteCliente
+        delete: async (id: number) => {
+          await deleteCliente(id);
+          return true;
+        }
       }}
       
       getFormData={(formValues) => ({
