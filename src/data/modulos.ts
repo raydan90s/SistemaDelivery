@@ -122,15 +122,6 @@ export const modules: Module[] = [
     component: TipoVehiculoAdmin,
     category: 'personal'
   },
-  {
-    id: 'clientes' as ModuleType,
-    name: 'Clientes',
-    description: 'Clientes registrados en el sistema',
-    icon: UserCircle,
-    color: 'bg-teal-500',
-    component: ClientesAdmin,
-    category: 'personal'
-  },
 
   // FINANZAS Y FACTURACIÓN
   {
@@ -198,6 +189,15 @@ export const modules: Module[] = [
     icon: FileText,
     color: 'bg-blue-500',
     component: TipoDocumentoAdmin,
+    category: 'configuracion'
+  },
+  {
+    id: 'clientes' as ModuleType,
+    name: 'Clientes',
+    description: 'Clientes registrados en el sistema',
+    icon: UserCircle,
+    color: 'bg-teal-500',
+    component: ClientesAdmin,
     category: 'configuracion'
   },
   {
