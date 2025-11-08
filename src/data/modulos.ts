@@ -1,9 +1,12 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, Box } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Box } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
 import ProvinciasAdmin from '@components/admin/ProvinciaAdmin';
 import CiudadesAdmin from '@components/admin/CiudadesAdmin';
+import ProductosAdmin from '@components/admin/ProductosAdmin';
+import CategoriasProductoAdmin from '@components/admin/CategoriasProductoAdmin';
+import PromocionesAdminAvanzado from '@components/admin/PromocionesAdminAvanzado';
 //import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
 //import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 //import IVAAdmin from './modules/IVAAdmin';
@@ -83,6 +86,30 @@ const modules = [
         color: 'bg-blue-500', 
         component: PedidoAdmin,  
     },
-];
+    {
+      id: 'productos' as ModuleType,
+      name: 'Productos',
+      description: 'Gestión de productos del menú',
+      icon: ShoppingBag,
+      color: 'bg-yellow-500',
+      component: ProductosAdmin
+    },
+    {
+      id: 'categorias-producto' as ModuleType,
+      name: 'Categorías de Producto',
+      description: 'Bebidas, Platos fuertes, Entradas, Postres',
+      icon: Tags,
+      color: 'bg-pink-500',
+      component: CategoriasProductoAdmin
+    },
+    {
+      id: 'promociones' as ModuleType,
+      name: 'Promociones',
+      description: 'Combos y ofertas con descuentos',
+      icon: Gift,
+      color: 'bg-cyan-500',
+      component: PromocionesAdminAvanzado
+    }
+  ];
 
 export default modules;

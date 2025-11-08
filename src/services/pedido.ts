@@ -5,7 +5,8 @@ import type { Pedido, PedidoConRelaciones } from '../types/pedidosTypes'; // Tip
 export const crearPedido = async (pedidoData: Pedido) => {
   const { data, error } = await supabase
     .from('pedidos') 
-    .insert([pedidoData]);
+    .insert([pedidoData])
+    .select();
 
   if (error) {
     console.error('Error al crear el pedido:', error.message);

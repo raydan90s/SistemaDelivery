@@ -39,6 +39,7 @@ export type DetallePedido = {
 
 
 export interface PedidoConRelaciones extends Pedido {
+
   clientes?: Cliente;
   estadospedido?: EstadoPedido;
   tipoentrega?: TipoEntrega;

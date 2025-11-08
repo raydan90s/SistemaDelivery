@@ -26,6 +26,7 @@ interface Column<T> {
   label: string;
   render?: (value: any, item: T) => React.ReactNode;
   exportRender?: (value: any, item: T) => string | number;
+  excludeFromExport?: boolean;
 }
 
 interface SimpleTableAdminProps<T extends { id: number }, TInsert, TUpdate> {
@@ -182,20 +183,22 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   });
 
   // Preparar columnas para exportación
-  const exportColumns = columns.map(col => ({
-    key: String(col.key),
-    label: col.label,
-    render: col.exportRender || ((value: any, item: T) => {
-      if (col.render) {
-        const rendered = col.render(value, item);
-        if (typeof rendered === 'string' || typeof rendered === 'number') {
-          return rendered;
+  const exportColumns = columns
+    .filter(col => !col.excludeFromExport)
+    .map(col => ({
+      key: String(col.key),
+      label: col.label,
+      render: col.exportRender || ((value: any, item: T) => {
+        if (col.render) {
+          const rendered = col.render(value, item);
+          if (typeof rendered === 'string' || typeof rendered === 'number') {
+            return rendered;
+          }
+          return String(value ?? '');
         }
         return String(value ?? '');
-      }
-      return String(value ?? '');
-    })
-  }));
+      })
+    }));
 
   if (loading) {
     return (
