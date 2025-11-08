@@ -7,10 +7,10 @@ import CiudadesAdmin from '@components/admin/CiudadesAdmin';
 import ProductosAdmin from '@components/admin/ProductosAdmin';
 import CategoriasProductoAdmin from '@components/admin/CategoriasProductoAdmin';
 import PromocionesAdminAvanzado from '@components/admin/PromocionesAdminAvanzado';
-//import EstadosGeneralesAdmin from './modules/EstadosGeneralesAdmin';
-//import MetodoPagoAdmin from './modules/MetodoPagoAdmin';
 import IVAAdmin from '@components/admin/IVAAdmin';
 import ProveedoresAdmin from '@components/admin/ProveedoresAdmin';
+import EstadosGeneralesAdmin from '@components/admin/EstadosGeneralesAdmin';
+import MetodosPagoAdmin from '@components/admin/MetodosPagoAdmin';
 
 const modules = [
     {
@@ -51,7 +51,7 @@ const modules = [
       description: 'Activo, Inactivo, Eliminado',
       icon: Settings,
       color: 'bg-gray-500',
-      //component: EstadosGeneralesAdmin
+      component: EstadosGeneralesAdmin
     },
     {
       id: 'metodopago' as ModuleType,
@@ -59,7 +59,7 @@ const modules = [
       description: 'Efectivo, Tarjeta, Transferencia',
       icon: DollarSign,
       color: 'bg-emerald-500',
-      //component: MetodoPagoAdmin
+      component: MetodosPagoAdmin
     },
     {
       id: 'iva' as ModuleType,

@@ -8,7 +8,7 @@ import {
 } from '@services/proveedores';
 import type { ProveedorConRelaciones } from '@services/proveedores';
 import { fetchProvincias } from '@services/provincia';
-import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 import type { Database } from '@models/supabase';
 
 type Proveedor = ProveedorConRelaciones;
