@@ -6,7 +6,7 @@ import ExportButtons from '@components/Botones/ExportButtons';
 interface Field {
   name: string;
   label: string;
-  type: 'text' | 'number' | 'textarea' | 'select';
+  type: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select';
   placeholder?: string;
   required?: boolean;
   readOnly?: boolean;
@@ -67,6 +67,7 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   const [editingItem, setEditingItem] = useState<T | null>(null);
   const [formValues, setFormValues] = useState<Record<string, any>>({});
   const [selectOptions, setSelectOptions] = useState<Record<string, Array<{ value: number | string; label: string }>>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -112,7 +113,7 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
     setSelectOptions(options);
   };
 
-  const handleOpenModal = (item?: T) => {
+  const handleOpenModal = async (item?: T) => {
     if (item) {
       setEditingItem(item);
       setFormValues(getInitialFormData(item));
@@ -120,6 +121,7 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
       setEditingItem(null);
       setFormValues(getInitialFormData());
     }
+    await loadSelectOptions();
     setShowModal(true);
   };
 
@@ -135,6 +137,8 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+
     const requiredFields = fields.filter(f => f.required);
     for (const field of requiredFields) {
       if (!formValues[field.name]?.toString().trim()) {
@@ -143,6 +147,7 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
       }
     }
 
+    setIsSubmitting(true);
     try {
       if (editingItem) {
         const payload = getFormData(formValues) as TUpdate;
@@ -157,6 +162,8 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
     } catch (error) {
       console.error('Error guardando:', error);
       alert('Error al guardar');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -178,6 +185,12 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
     const searchLower = searchTerm.toLowerCase();
     return searchFields.some(field => {
       const value = item[field];
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        const obj = value as Record<string, any>;
+        return Object.values(obj).some(val => 
+          val?.toString().toLowerCase().includes(searchLower)
+        );
+      }
       return value?.toString().toLowerCase().includes(searchLower);
     });
   });
@@ -352,7 +365,12 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
                       onChange={(e) => handleInputChange(field.name, e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder={field.placeholder}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !isSubmitting) {
+                          e.preventDefault();
+                          handleSubmit();
+                        }
+                      }}
                       readOnly={field.readOnly}
                     />
                   )}
@@ -369,9 +387,10 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
               </button>
               <button
                 onClick={handleSubmit}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+                disabled={isSubmitting}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {editingItem ? 'Actualizar' : 'Crear'}
+                {isSubmitting ? 'Guardando...' : (editingItem ? 'Actualizar' : 'Crear')}
               </button>
             </div>
           </div>

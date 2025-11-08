@@ -88,3 +88,18 @@ export async function deleteEmpleado(id: number) {
   }
   return true;
 }
+
+
+export async function fetchEmpleadoByUsuarioId(usuarioId: number) {
+  const { data, error } = await supabase
+    .from('empleados')
+    .select(selectQuery)
+    .eq('usuario_id', usuarioId)
+    .single();
+
+  if (error) {
+    console.error('Error al obtener empleado por usuario_id:', error);
+    throw error;
+  }
+  return data as EmpleadoConRelaciones;
+}

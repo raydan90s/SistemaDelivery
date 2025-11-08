@@ -4,10 +4,10 @@ import {
   fetchClientes,
   createCliente,
   updateCliente,
-  deleteCliente
+  deleteCliente,
+  type ClienteConRelaciones
 } from '@services/clientes';
 import { fetchTipoDocumentos } from '@services/tipoDocumento';
-import { fetchEstadosGenerales } from '@services/estadosGenerales';
 import { fetchTipoClientes } from '@services/tipoCliente';
 import type { Database } from '@models/supabase';
 
@@ -17,7 +17,7 @@ type ClienteUpdate = Database['public']['Tables']['clientes']['Update'];
 
 const ClientesAdmin: React.FC = () => {
   return (
-    <SimpleTableAdmin<Cliente, ClienteInsert, ClienteUpdate>
+    <SimpleTableAdmin<ClienteConRelaciones, ClienteInsert, ClienteUpdate>
       title="Clientes"
       description="Gestiona los clientes registrados en el sistema"
       buttonLabel="Nuevo Cliente"
@@ -40,11 +40,18 @@ const ClientesAdmin: React.FC = () => {
           required: false
         },
         {
-          name: 'correo',
-          label: 'Correo Electrónico',
-          type: 'text',
-          placeholder: 'Ej: juan@example.com',
-          required: false
+          name: 'email',
+          label: 'Email',
+          type: 'email',
+          placeholder: 'Ej: juan.perez@example.com',
+          required: true
+        },
+        {
+          name: 'password',
+          label: 'Contraseña',
+          type: 'password',
+          placeholder: 'Ingresa la contraseña para el cliente',
+          required: true
         },
         {
           name: 'celular',
@@ -97,37 +104,44 @@ const ClientesAdmin: React.FC = () => {
           exportRender: (value) => value
         },
         { 
-          key: 'nombre', 
+          key: 'usuario' as any, 
           label: 'Nombre',
-          exportRender: (value) => value
+          render: (_, item) => item.usuario?.nombre || '-',
+          exportRender: (_, item) => item.usuario?.nombre || '-'
         },
         { 
-          key: 'apellido', 
+          key: 'usuario' as any, 
           label: 'Apellido',
-          render: (value) => value || '-',
-          exportRender: (value) => value || '-'
+          render: (_, item) => item.usuario?.apellido || '-',
+          exportRender: (_, item) => item.usuario?.apellido || '-'
         },
         { 
-          key: 'correo', 
-          label: 'Correo',
-          render: (value) => value || '-',
-          exportRender: (value) => value || '-'
-        },
-        { 
-          key: 'celular', 
+          key: 'usuario' as any, 
           label: 'Celular',
-          render: (value) => value || '-',
-          exportRender: (value) => value || '-'
+          render: (_, item) => item.usuario?.celular || '-',
+          exportRender: (_, item) => item.usuario?.celular || '-'
         },
         { 
           key: 'numero_documento', 
           label: 'N° Documento',
           render: (value) => value || '-',
           exportRender: (value) => value || '-'
+        },
+        { 
+          key: 'tipo_documento' as any, 
+          label: 'Tipo Documento',
+          render: (_, item) => item.tipo_documento?.descripcion || '-',
+          exportRender: (_, item) => item.tipo_documento?.descripcion || '-'
+        },
+        { 
+          key: 'tipo_cliente' as any, 
+          label: 'Tipo Cliente',
+          render: (_, item) => item.tipo_cliente?.descripcion || '-',
+          exportRender: (_, item) => item.tipo_cliente?.descripcion || '-'
         }
       ]}
       
-      searchFields={['nombre', 'apellido', 'correo', 'celular', 'numero_documento']}
+      searchFields={['numero_documento', 'usuario'] as any}
       
       operations={{
         fetch: fetchClientes,
@@ -139,18 +153,20 @@ const ClientesAdmin: React.FC = () => {
       getFormData={(formValues) => ({
         nombre: formValues.nombre,
         apellido: formValues.apellido || null,
-        correo: formValues.correo || null,
         celular: formValues.celular || null,
+        email: formValues.email,
+        password: formValues.password || null,
         numero_documento: formValues.numero_documento || null,
         tipo_documento_id: formValues.tipo_documento_id ? Number(formValues.tipo_documento_id) : null,
         tipo_cliente_id: formValues.tipo_cliente_id ? Number(formValues.tipo_cliente_id) : null
-      })}
+      } as any)}
       
       getInitialFormData={(item) => ({
-        nombre: item?.nombre || '',
-        apellido: item?.apellido || '',
-        correo: item?.correo || '',
-        celular: item?.celular || '',
+        nombre: item?.usuario?.nombre || '',
+        apellido: item?.usuario?.apellido || '',
+        celular: item?.usuario?.celular || '',
+        email: '',
+        password: '',
         numero_documento: item?.numero_documento || '',
         tipo_documento_id: item?.tipo_documento_id?.toString() || '',
         tipo_cliente_id: item?.tipo_cliente_id?.toString() || ''

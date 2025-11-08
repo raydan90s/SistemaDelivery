@@ -40,6 +40,43 @@ export const obtenerPedidos = async () => {
   }
   return (data || []) as PedidoConRelaciones[];
 };
+
+// Obtener pedidos por cliente_id
+export const obtenerPedidosPorClienteId = async (clienteId: number): Promise<PedidoConRelaciones[]> => {
+  const { data, error } = await supabase
+    .from('pedidos') 
+    .select(`
+      *,
+      clientes(
+        nombre,
+        apellido,
+        celular,
+        direccionescliente(direccion)
+      ),
+      estadospedido(descripcion),
+      tipoentrega(descripcion),
+      detallepedido(
+        id,
+        cantidad,
+        precio,
+        subtotal,
+        productos(
+          nombre,
+          descripcion,
+          imagen_url
+        )
+      )
+    `)
+    .eq('cliente_id', clienteId)
+    .neq('estado_id', 2)
+    .order('fecha', { ascending: false });
+
+  if (error) {
+    console.error('Error al obtener los pedidos del cliente:', error.message);
+    throw error;
+  }
+  return (data || []) as PedidoConRelaciones[];
+};
 // Obtener un pedido por su ID
 export const obtenerPedidoPorId = async (id: number): Promise<PedidoConRelaciones> => {
   const { data, error } = await supabase

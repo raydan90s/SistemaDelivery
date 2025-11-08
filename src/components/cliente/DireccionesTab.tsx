@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Plus, X, Trash2 } from 'lucide-react';
+import { useAuth } from '@context/AuthContext';
 import { fetchDireccionesCliente, createDireccionCliente, deleteDireccionCliente } from '@services/direccionesCliente';
 import { fetchProvincias } from '@services/provincia';
 import { fetchCiudadesByProvincia } from '@services/ciudades';
 import type { DireccionClienteCompleta } from '@services/direccionesCliente';
 
 const DireccionesTab: React.FC = () => {
+  const { clienteData, isLoading } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [direcciones, setDirecciones] = useState<DireccionClienteCompleta[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,17 +21,19 @@ const DireccionesTab: React.FC = () => {
     referencias: ''
   });
 
-  const clienteId = 1;
-
   useEffect(() => {
-    loadDirecciones();
-    loadProvincias();
-  }, []);
+    if (clienteData) {
+      loadDirecciones();
+      loadProvincias();
+    }
+  }, [clienteData]);
 
   const loadDirecciones = async () => {
+    if (!clienteData?.id) return;
+    
     try {
       setLoading(true);
-      const data = await fetchDireccionesCliente(clienteId);
+      const data = await fetchDireccionesCliente(clienteData.id);
       setDirecciones(data);
     } catch (error) {
       console.error('Error cargando direcciones:', error);
@@ -63,6 +67,11 @@ const DireccionesTab: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    if (!clienteData?.id) {
+      alert('No se pudieron cargar los datos del cliente');
+      return;
+    }
+
     if (!formData.direccion.trim()) {
       alert('La dirección es requerida');
       return;
@@ -70,7 +79,7 @@ const DireccionesTab: React.FC = () => {
 
     try {
       await createDireccionCliente({
-        cliente_id: clienteId,
+        cliente_id: clienteData.id,
         direccion: formData.direccion,
         provincia_id: formData.provincia_id ? Number(formData.provincia_id) : null,
         ciudad_id: formData.ciudad_id ? Number(formData.ciudad_id) : null,
@@ -111,10 +120,21 @@ const DireccionesTab: React.FC = () => {
     setCiudades([]);
   };
 
-  if (loading) {
+  if (isLoading || loading) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-gray-600">Cargando...</div>
+      </div>
+    );
+  }
+
+  if (!clienteData) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <p className="text-gray-600 mb-2">No se pudieron cargar los datos del cliente</p>
+          <p className="text-gray-400 text-sm">Por favor, inicia sesión como cliente</p>
+        </div>
       </div>
     );
   }

@@ -10,8 +10,6 @@ import { fetchRepartidoresActivos } from '@services/repartidores';
 import type { Database } from '@models/supabase';
 import { scrollToHashOnLoad, handleScrollToTop } from '@utils/scrollUtils';
 import { useLocation } from 'react-router-dom';
- 
-
 type Repartidor = Database['public']['Tables']['repartidores']['Row'];
 
 const CartPage = () => {
@@ -24,19 +22,16 @@ const CartPage = () => {
 
     const location = useLocation();
 
-    // Scroll al top en CADA carga/recarga
     useEffect(() => {
         if (location.hash) {
             scrollToHashOnLoad();
         } else {
-            // Forzar scroll inmediato al montar
             window.scrollTo(0, 0);
-            // Y también smooth después de un momento
             setTimeout(() => {
                 handleScrollToTop();
             }, 0);
         }
-    }, [location.pathname, location.hash]); // Agregamos pathname para que se ejecute en cada navegación
+    }, [location.pathname, location.hash]);
 
     useEffect(() => {
         const obtenerIVA = async () => {
