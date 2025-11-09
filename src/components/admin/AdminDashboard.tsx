@@ -5,6 +5,8 @@ import VolverButton from '@components/Botones/AtrasButton';
 import type { ModuleType } from '@models/modulos';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
+
+
 const AdminDashboard: React.FC = () => {
     const { moduleId } = useParams<{ moduleId?: string }>();
     const activeModule = (moduleId as ModuleType) || null;
