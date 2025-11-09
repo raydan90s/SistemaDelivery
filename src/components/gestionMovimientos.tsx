@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchMovimientos } from "@services/movimientos";
-import MovimientosForm from "@pages/movimientosForm";
+import MovimientosForm from "@components/movimientosForm";
 import { Plus } from "lucide-react";
 
 const gestionMovimientos = () => {

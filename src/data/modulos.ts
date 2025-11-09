@@ -18,7 +18,7 @@ import RepartidoresAdmin from '@components/admin/RepartidoresAdmin';
 import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
 import PedidoAdmin from '@components/admin/PedidoAdmin';
 import Factura from '@components/admin/Factura';
-import gestionBodegas from '@pages/gestionBodegas'; 
+import gestionBodegas from '@components/admin/gestionBodegasAdmin'; 
 
 export interface Module {
   id: ModuleType;

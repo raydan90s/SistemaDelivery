@@ -3,7 +3,7 @@ import { AuthProvider } from '@context/AuthContext';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from '@pages/Home';
 import ClientePerfil from '@pages/ClientePerfil';
-import ProductosPorCategoria from '@pages/ProductosPorCategoria';
+import ProductosPorCategoria from '@components/ProductosPorCategoria';
 import ResultadosBusqueda from '@pages/ResultadosBusqueda';
 import Navbar from '@components/Navbar';
 import Footer from '@components/Footer';
