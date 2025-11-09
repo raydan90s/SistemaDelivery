@@ -69,7 +69,7 @@ const Categories: React.FC = () => {
   }
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white" data-section="categories">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-text-dark mb-12">
           Nuestras Categorías

@@ -19,41 +19,41 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <div>
+        <div className="flex flex-col min-h-screen">
           <ScrollToTop />
           <Navbar />
-          <main>
+          <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/cliente/perfil" element={<ClientePerfil/>} />
               <Route path="/categoria/:categoriaId" element={<ProductosPorCategoria />} />
               <Route path="/buscar" element={<ResultadosBusqueda />} />
-              
-              <Route 
-                path='/admin/dashboard' 
+
+              <Route
+                path='/admin/dashboard'
                 element={
                   <AdminRoute>
                     <AdminDashboard />
                   </AdminRoute>
-                } 
+                }
               />
-            <Route 
-                path='/admin/dashboard/:moduleId' 
+            <Route
+                path='/admin/dashboard/:moduleId'
                 element={
                   <AdminRoute>
                     <AdminDashboard />
                   </AdminRoute>
-                } 
+                }
               />
-              <Route 
-                path='/admin/dashboard/facturacion/:id' 
+              <Route
+                path='/admin/dashboard/facturacion/:id'
                 element={
                   <AdminRoute>
                     <DetalleFactura />
                   </AdminRoute>
-                } 
+                }
               />
-              
+
               <Route path='/carrito' element={<CartPage />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/register' element={<RegisterPage />} />

@@ -11,7 +11,6 @@ export type ModuleType =
   | 'proveedores'
   | 'productos'
   | 'categorias-producto'
-  | 'promociones'
   | "repartidores"
   | "tipovehiculo"
   | 'pedidoAdmin'
