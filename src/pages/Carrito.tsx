@@ -137,24 +137,36 @@ const CartPage = () => {
             console.log('Pedido y detalles creados exitosamente');
             // ======================================================= Facturación
 
+                        
             try {
-                // crear fact
+                const ivaData = await fetchIVA();
+                let ivaIdActivo = 1; // Valor por defecto
+
+                if (ivaData && ivaData.length > 0) {
+                    const ivaActivo = ivaData.find(iva => iva.estado_id === 1);
+                    if (ivaActivo) {
+                        ivaIdActivo = ivaActivo.id;
+                    } else {
+                        ivaIdActivo = ivaData[ivaData.length - 1].id;
+                    }
+                }
+
+                // crear factura 
                 const nuevaFactura = {
                     cliente_id: 1,
                     pedido_id: pedidoId,
                     fecha: new Date().toISOString(),
-                    total: getTotalPrice() * 1.15,
+                    total: getTotalPrice(),
                     estado_id: 1,
                     metodo_pago_id: 1,
-                    iva_id: 1
+                    iva_id: ivaIdActivo
                 };
 
-                
                 const facturaCreada = await createFactura(nuevaFactura);
                 const facturaId = facturaCreada.id;
-                console.log("✅ Factura creada con ID:", facturaId);
+                
 
-                // crear detalles de fact
+                // detalles de factura
                 for (const item of cartItems) {
                     const detalleFactura = {
                         factura_id: facturaId,
@@ -165,10 +177,8 @@ const CartPage = () => {
                     };
 
                     await createDetalleFactura(detalleFactura);
-                    
                 }
             } catch (error) {
-                
                 throw error;
             }
   

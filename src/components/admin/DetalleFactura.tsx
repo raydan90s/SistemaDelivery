@@ -75,7 +75,7 @@ export default function DetalleFactura() {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Botón de regreso personalizado */}
+        
         <button
           onClick={() => navigate("/admin/dashboard/facturacion", { replace: true })}
           className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 shadow-md cursor-pointer"

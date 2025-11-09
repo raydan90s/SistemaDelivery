@@ -13,6 +13,7 @@ import ScrollToTop from '@components/ScrollToTop';
 import LoginPage from '@pages/Login';
 import RegisterPage from '@pages/Register';
 import AdminRoute from '@components/ProtectedRoute/AdminRoute';
+import DetalleFactura from '@components/admin/DetalleFactura';
 
 function App() {
   return (
@@ -36,11 +37,19 @@ function App() {
                   </AdminRoute>
                 } 
               />
-              <Route 
+            <Route 
                 path='/admin/dashboard/:moduleId' 
                 element={
                   <AdminRoute>
                     <AdminDashboard />
+                  </AdminRoute>
+                } 
+              />
+              <Route 
+                path='/admin/dashboard/facturacion/:id' 
+                element={
+                  <AdminRoute>
+                    <DetalleFactura />
                   </AdminRoute>
                 } 
               />

@@ -13,8 +13,10 @@ export default function Factura() {
   useEffect(() => {
     const cargarFacturas = async () => {
       try {
+        
         const data = await fetchFacturas();
-        setFacturas(data);
+        
+        setFacturas(data || []);
       } catch (error) {
         console.error("Error al cargar facturas:", error);
       } finally {
@@ -37,6 +39,7 @@ export default function Factura() {
   );
 
   
+
   const columnasReporte = [
     { key: "id", label: "ID" },
     {
@@ -126,7 +129,7 @@ export default function Factura() {
             {facturasFiltradas.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                  No hay facturas registradas.
+                  No hay facturas registradas. (Total en BD: {facturas.length})
                 </td>
               </tr>
             ) : (
