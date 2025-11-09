@@ -12,6 +12,7 @@ import { fetchRepartidoresActivos } from '@services/repartidores';
 import type { Database } from '@models/supabase';
 import { scrollToHashOnLoad, handleScrollToTop } from '@utils/scrollUtils';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '@context/AuthContext';
 type Repartidor = Database['public']['Tables']['repartidores']['Row'];
 
 
@@ -22,6 +23,7 @@ const CartPage = () => {
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [ivaPorcentaje, setIvaPorcentaje] = useState<number | null>(null);
     const [repartidores, setRepartidores] = useState<Repartidor[]>([]);
+    const { user, usuarioData, clienteData } = useAuth();
 
     const location = useLocation();
 
@@ -91,13 +93,38 @@ const CartPage = () => {
         return getTotalPrice() - getSubtotal();
     };
 
+    const handleProceedToPayment = () => {
+        // Verificar si el usuario está autenticado
+        if (!user || !usuarioData) {
+            alert('Debes iniciar sesión para proceder con el pago');
+            navigate('/login', { state: { from: '/cart' } });
+            return;
+        }
+
+        // Verificar si es un cliente
+        if (!clienteData) {
+            alert('Solo los clientes pueden realizar pedidos');
+            return;
+        }
+
+        setShowPaymentModal(true);
+        handleScrollToTop();
+    };
+
     const handlePayment = async () => {
+        // Validación adicional antes de procesar el pago
+        if (!user || !usuarioData || !clienteData) {
+            alert('Debes iniciar sesión como cliente para realizar el pedido');
+            navigate('/login', { state: { from: '/cart' } });
+            return;
+        }
+
         setPaymentSuccess(true);
 
         const repartidorId = seleccionarRepartidorAleatorio();
 
         const nuevoPedido = {
-            cliente_id: 1, 
+            cliente_id: clienteData.id,
             fecha: new Date().toISOString(),
             total: getTotalPrice(),
             estado_pedido_id: 2, //En preparacion
@@ -131,16 +158,10 @@ const CartPage = () => {
                 if (!detalleCreado) {
                     console.error('❌ Error al crear detalle para producto:', item.id);
                 }
-            }
-
-
-            console.log('Pedido y detalles creados exitosamente');
-            // ======================================================= Facturación
-
-                        
+            }                        
             try {
                 const ivaData = await fetchIVA();
-                let ivaIdActivo = 1; // Valor por defecto
+                let ivaIdActivo = 1;
 
                 if (ivaData && ivaData.length > 0) {
                     const ivaActivo = ivaData.find(iva => iva.estado_id === 1);
@@ -153,7 +174,7 @@ const CartPage = () => {
 
                 // crear factura 
                 const nuevaFactura = {
-                    cliente_id: 1,
+                    cliente_id: clienteData.id,
                     pedido_id: pedidoId,
                     fecha: new Date().toISOString(),
                     total: getTotalPrice(),
@@ -314,11 +335,7 @@ const CartPage = () => {
                                 </div>
 
                                 <button
-                                    onClick={() => {
-                                        setShowPaymentModal(true);
-                                        handleScrollToTop();
-                                    }}
-
+                                    onClick={handleProceedToPayment}
                                     className="cursor-pointer w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-hover transition-colors font-semibold flex items-center justify-center gap-2"
                                 >
                                     <CreditCard className="w-5 h-5" />
