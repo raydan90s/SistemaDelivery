@@ -8,7 +8,7 @@ import {
 } from '@services/productos';
 import { fetchCategoriasProductoOptions } from '@services/categoriasProducto';
 import { fetchUnidadesMedida } from '@services/unidadMedida';
-import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 import type { Database } from '@models/supabase';
 
 type Producto = Database['public']['Tables']['productos']['Row'];

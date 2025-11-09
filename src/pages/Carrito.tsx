@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ShoppingCart, Trash2, Plus, Minus, CreditCard, ArrowLeft } from 'lucide-react';
 import { useCart } from '@hooks/useCart';
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,12 @@ import { crearDetallePedido } from '@services/detallespedido';
 import PaymentModal from '@components/PaymentModal';
 import { createFactura } from '@services/facturaService';
 import { createDetalleFactura } from '@services/detalleFacturaService';
+import { fetchIVA } from '@services/IVA';
+import { fetchRepartidoresActivos } from '@services/repartidores';
+import type { Database } from '@models/supabase';
+import { scrollToHashOnLoad, handleScrollToTop } from '@utils/scrollUtils';
+import { useLocation } from 'react-router-dom';
+type Repartidor = Database['public']['Tables']['repartidores']['Row'];
 
 
 const CartPage = () => {
@@ -14,17 +20,89 @@ const CartPage = () => {
     const { cartItems, updateQuantity, removeFromCart, getTotalPrice, getTotalItems, clearCart } = useCart();
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [ivaPorcentaje, setIvaPorcentaje] = useState<number | null>(null);
+    const [repartidores, setRepartidores] = useState<Repartidor[]>([]);
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.hash) {
+            scrollToHashOnLoad();
+        } else {
+            window.scrollTo(0, 0);
+            setTimeout(() => {
+                handleScrollToTop();
+            }, 0);
+        }
+    }, [location.pathname, location.hash]);
+
+    useEffect(() => {
+        const obtenerIVA = async () => {
+            try {
+                const ivaData = await fetchIVA();
+                if (ivaData && ivaData.length > 0) {
+                    const ivaActivo = ivaData.find(iva => iva.estado_id === 1);
+                    if (ivaActivo) {
+                        setIvaPorcentaje(ivaActivo.porcentaje);
+                    } else {
+                        setIvaPorcentaje(ivaData[ivaData.length - 1].porcentaje);
+                    }
+                }
+            } catch (error) {
+                console.error('Error al obtener IVA:', error);
+                setIvaPorcentaje(15);
+            }
+        };
+        obtenerIVA();
+    }, []);
+
+    useEffect(() => {
+        const obtenerRepartidores = async () => {
+            try {
+                const repartidoresActivos = await fetchRepartidoresActivos();
+                setRepartidores(repartidoresActivos);
+
+                if (repartidoresActivos.length === 0) {
+                    console.warn('⚠️ No hay repartidores activos disponibles');
+                }
+            } catch (error) {
+                console.error('❌ Error al obtener repartidores:', error);
+            }
+        };
+        obtenerRepartidores();
+    }, []);
+
+    const seleccionarRepartidorAleatorio = (): number | null => {
+        if (repartidores.length === 0) {
+            console.warn('⚠️ No hay repartidores disponibles. Se creará el pedido sin repartidor asignado.');
+            return null;
+        }
+        const indiceAleatorio = Math.floor(Math.random() * repartidores.length);
+        const repartidorSeleccionado = repartidores[indiceAleatorio];
+        return repartidorSeleccionado.id;
+    };
+
+    const getSubtotal = () => {
+        if (ivaPorcentaje === null) return getTotalPrice();
+        return getTotalPrice() / (1 + ivaPorcentaje / 100);
+    };
+
+    const getIVAAmount = () => {
+        return getTotalPrice() - getSubtotal();
+    };
 
     const handlePayment = async () => {
         setPaymentSuccess(true);
-        
+
+        const repartidorId = seleccionarRepartidorAleatorio();
+
         const nuevoPedido = {
             cliente_id: 1, //Reemplazar con cliente context
             fecha: new Date().toISOString(),
             total: getTotalPrice(),
-            estado_pedido_id: 2, //En preparcion
+            estado_pedido_id: 2, //En preparacion
             tipo_entrega_id: 1, //delivery
-            repartidor_id: null,
+            repartidor_id: repartidorId,
             estado_id: 1 //Activo
         };
 
@@ -38,7 +116,6 @@ const CartPage = () => {
             }
 
             const pedidoId = pedidoCreado[0].id;
-            console.log('Pedido creado con ID:', pedidoId);
 
             for (const item of cartItems) {
                 const detalle = {
@@ -48,13 +125,14 @@ const CartPage = () => {
                     precio: item.price,
                     subtotal: item.price * item.quantity
                 };
-                
+
                 const detalleCreado = await crearDetallePedido(detalle);
-                
+
                 if (!detalleCreado) {
-                    console.error('Error al crear detalle para producto:', item.id);
+                    console.error('❌ Error al crear detalle para producto:', item.id);
                 }
             }
+
 
             console.log('Pedido y detalles creados exitosamente');
             // ======================================================= Facturación
@@ -98,6 +176,8 @@ const CartPage = () => {
 
         // ======================================================= Facturación
 
+
+
             setTimeout(() => {
                 clearCart();
                 setShowPaymentModal(false);
@@ -105,9 +185,18 @@ const CartPage = () => {
                 navigate('/');
             }, 2000);
 
-        } catch (error) {
-            console.error('Error al procesar el pago:', error);
-            alert('Hubo un error al procesar tu pedido. Por favor, intenta nuevamente.');
+        } catch (error: any) {
+            console.error('❌ Error al procesar el pago:', error);
+
+            let mensajeError = 'Hubo un error al procesar tu pedido. ';
+
+            if (error.message && error.message.includes('pedidos_ibfk')) {
+                mensajeError += 'Verifica que todos los datos sean válidos.';
+            } else {
+                mensajeError += 'Por favor, intenta nuevamente.';
+            }
+
+            alert(mensajeError);
             setPaymentSuccess(false);
             setShowPaymentModal(false);
         }
@@ -122,7 +211,7 @@ const CartPage = () => {
                             <ShoppingCart className="w-24 h-24 text-gray-300 mx-auto mb-4" />
                             <h2 className="text-2xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
                             <p className="text-gray-600 mb-6">Agrega algunos productos para comenzar</p>
-                            <button 
+                            <button
                                 onClick={() => navigate('/')}
                                 className="cursor-pointer bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-hover transition-colors">
                                 Explorar productos
@@ -198,7 +287,11 @@ const CartPage = () => {
                                 <div className="space-y-3 mb-4">
                                     <div className="flex justify-between text-gray-600">
                                         <span>Subtotal ({getTotalItems()} items)</span>
-                                        <span>${getTotalPrice().toFixed(2)}</span>
+                                        <span>${getSubtotal().toFixed(2)}</span>
+                                    </div>
+                                    <div className="flex justify-between text-gray-600">
+                                        <span>IVA ({ivaPorcentaje !== null ? ivaPorcentaje : '...'}%)</span>
+                                        <span>${getIVAAmount().toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between text-gray-600">
                                         <span>Envío</span>
@@ -211,7 +304,11 @@ const CartPage = () => {
                                 </div>
 
                                 <button
-                                    onClick={() => setShowPaymentModal(true)}
+                                    onClick={() => {
+                                        setShowPaymentModal(true);
+                                        handleScrollToTop();
+                                    }}
+
                                     className="cursor-pointer w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-hover transition-colors font-semibold flex items-center justify-center gap-2"
                                 >
                                     <CreditCard className="w-5 h-5" />

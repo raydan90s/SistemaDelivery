@@ -6,7 +6,7 @@ import {
   updateCategoriaProducto,
   deleteCategoriaProducto
 } from '@services/categoriasProducto';
-import { fetchEstadosGenerales } from '@services/estadosGeneralesService';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 import type { Database } from '@models/supabase';
 
 type CategoriaProducto = Database['public']['Tables']['categoriasproducto']['Row'];
