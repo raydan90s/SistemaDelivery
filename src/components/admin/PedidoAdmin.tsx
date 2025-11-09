@@ -43,16 +43,20 @@ const PedidoAdmin: React.FC = () => {
           { 
             key: 'cliente_id',
             label: 'Cliente',
-            render: (_, item) => 
-              `${item.clientes?.nombre || ''} ${item.clientes?.apellido || ''}`.trim() || 'N/A',
-            exportRender: (_, item) =>
-              `${item.clientes?.nombre || ''} ${item.clientes?.apellido || ''}`.trim() || 'N/A',
+            render: (_, item) => {
+              const usuario = item.clientes?.usuarios;
+              return `${usuario?.nombre || ''} ${usuario?.apellido || ''}`.trim() || 'N/A';
+            },
+            exportRender: (_, item) => {
+              const usuario = item.clientes?.usuarios;
+              return `${usuario?.nombre || ''} ${usuario?.apellido || ''}`.trim() || 'N/A';
+            }
           },
           { 
             key: 'cliente_id',
             label: 'Teléfono',
-            render: (_, item) => item.clientes?.celular || 'N/A',
-            exportRender: (_, item) => item.clientes?.celular || 'N/A',
+            render: (_, item) => item.clientes?.usuarios?.celular || 'N/A', 
+            exportRender: (_, item) => item.clientes?.usuarios?.celular || 'N/A',
           },
           { 
             key: 'cliente_id',

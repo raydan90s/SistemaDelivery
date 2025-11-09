@@ -4,15 +4,23 @@ export type Pedido = Database['public']['Tables']['pedidos']['Row'];
 export type PedidoInsert = Database['public']['Tables']['pedidos']['Insert'];
 export type PedidoUpdate = Database['public']['Tables']['pedidos']['Update'];
 
-export type Cliente = {
-  nombre: string | null;
+
+export type Usuario = {
+  nombre: string;
   apellido: string | null;
   celular: string | null;
-  direccionescliente?: DireccionCliente[] | null;  
 };
 
 export type DireccionCliente = {
-  direccion: string | null;
+  direccion: string;
+};
+
+export type Cliente = {
+  id: number;
+  numero_documento: string | null;
+  usuario_id: number | null;
+  usuarios?: Usuario | null; 
+  direccionescliente?: DireccionCliente[] | null;
 };
 
 export type EstadoPedido = {
@@ -40,8 +48,8 @@ export type DetallePedido = {
 
 export interface PedidoConRelaciones extends Pedido {
 
-  clientes?: Cliente;
-  estadospedido?: EstadoPedido;
-  tipoentrega?: TipoEntrega;
-  detallepedido?: DetallePedido[];
+  clientes?: Cliente | null;
+  estadospedido?: EstadoPedido | null;
+  tipoentrega?: TipoEntrega | null;
+  detallepedido?: DetallePedido[] | null;
 }

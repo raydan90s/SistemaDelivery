@@ -3,28 +3,28 @@ import { X } from 'lucide-react';
 import { obtenerPedidoPorId } from '@services/pedido';
 import type { PedidoConRelaciones } from '../../types/pedidosTypes';
 
-interface VerPedidoModalProps {
+interface VerPedidoModalProps { 
     pedidoId: number | null;
     isOpen: boolean;
     onClose: () => void;
 }
 
 const VerPedidoModal: React.FC<VerPedidoModalProps> = ({ pedidoId, isOpen, onClose }) => {
-    const [pedido, setPedido] = useState<PedidoConRelaciones | null>(null);
+    const [pedido, setPedido] = useState<PedidoConRelaciones | null>(null); 
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => { 
         if (isOpen && pedidoId !== null) {
             loadPedido();
         }
     }, [isOpen, pedidoId]);
 
-    const loadPedido = async () => {
+    const loadPedido = async () => { 
         if (pedidoId === null) return;
         try {
             setLoading(true);
-            const data = await obtenerPedidoPorId(pedidoId);
-            setPedido(data);
+            const data = await obtenerPedidoPorId(pedidoId); 
+            setPedido(data); 
         } catch (error) {
             console.error('Error al cargar el pedido;', error);
             alert('Error al cargar el pedido');
@@ -43,7 +43,7 @@ const VerPedidoModal: React.FC<VerPedidoModalProps> = ({ pedidoId, isOpen, onClo
         });
     };
 
-    const formatCurrency = (amount: number) => {
+    const formatCurrency = (amount: number) => { 
         return `$${amount.toFixed(2)}`;
     };
 
@@ -52,7 +52,7 @@ const VerPedidoModal: React.FC<VerPedidoModalProps> = ({ pedidoId, isOpen, onClo
     return (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center"> 
                     <h2 className="text-2xl font-bold text-gray-900">
                         Detalles del Pedido #{pedido?.id}
                     </h2>
@@ -76,12 +76,12 @@ const VerPedidoModal: React.FC<VerPedidoModalProps> = ({ pedidoId, isOpen, onClo
                                 <div>
                                     <p className="text-sm text-gray-600">Nombre</p>
                                     <p className="font-medium text-gray-900">
-                                        {pedido.clientes?.nombre} {pedido.clientes?.apellido}
+                                        {pedido.clientes?.usuarios?.nombre} {pedido.clientes?.usuarios?.apellido}
                                     </p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-600">Teléfono</p>
-                                    <p className="font-medium text-gray-900">{pedido.clientes?.celular || 'N/A'}</p>
+                                    <p className="font-medium text-gray-900">Teléfono: {pedido.clientes?.usuarios?.celular || 'N/A'}</p>
                                 </div>
                                 <div className="col-span-2">
                                     <p className="text-sm text-gray-600">Dirección</p>

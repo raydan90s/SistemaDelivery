@@ -94,7 +94,7 @@ const CartPage = () => {
         const repartidorId = seleccionarRepartidorAleatorio();
 
         const nuevoPedido = {
-            cliente_id: 1, //Reemplazar con cliente context
+            cliente_id: 1, 
             fecha: new Date().toISOString(),
             total: getTotalPrice(),
             estado_pedido_id: 2, //En preparacion
