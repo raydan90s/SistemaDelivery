@@ -10,20 +10,27 @@ const PedidosTab: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (clienteData) {
+    if (clienteData && !isLoading) {
       loadPedidos();
     }
-  }, [clienteData]);
+  }, [clienteData, isLoading]);
 
   const loadPedidos = async () => {
-    if (!clienteData?.id) return;
+    if (!clienteData?.id) {
+      console.log('No hay clienteData o clienteData.id');
+      setLoading(false);
+      return;
+    }
 
     try {
       setLoading(true);
+      console.log('Cargando pedidos para cliente:', clienteData.id);
       const data = await obtenerPedidosPorClienteId(clienteData.id);
+      console.log('Pedidos cargados:', data);
       setPedidos(data);
     } catch (error) {
       console.error('Error cargando pedidos:', error);
+      alert('Error al cargar los pedidos. Por favor, intenta nuevamente.');
     } finally {
       setLoading(false);
     }
@@ -47,10 +54,10 @@ const PedidosTab: React.FC = () => {
     }).format(amount);
   };
 
-  if (isLoading || loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-gray-600">Cargando pedidos...</div>
+        <div className="text-gray-600">Cargando datos del cliente...</div>
       </div>
     );
   }
@@ -62,6 +69,14 @@ const PedidosTab: React.FC = () => {
           <p className="text-gray-600 mb-2">No se pudieron cargar los datos del cliente</p>
           <p className="text-gray-400 text-sm">Por favor, inicia sesión como cliente</p>
         </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-gray-600">Cargando pedidos...</div>
       </div>
     );
   }

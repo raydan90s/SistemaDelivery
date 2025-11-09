@@ -66,14 +66,23 @@ export const obtenerPedidosPorClienteId = async (clienteId: number): Promise<Ped
     .from('pedidos') 
     .select(`
       *,
-      clientes(
-        nombre,
-        apellido,
-        celular,
-        direccionescliente(direccion)
+      clientes!cliente_id(
+        id,
+        numero_documento,
+        usuario_id,
+        usuarios!clientes_ibfk_usuario(
+          nombre,
+          apellido,
+          celular
+        ),
+        direccionescliente(
+          direccion,
+          referencias,
+          codigo_postal
+        )
       ),
-      estadospedido(descripcion),
-      tipoentrega(descripcion),
+      estadospedido!estado_pedido_id(descripcion),
+      tipoentrega!tipo_entrega_id(descripcion),
       detallepedido(
         id,
         cantidad,
@@ -92,6 +101,7 @@ export const obtenerPedidosPorClienteId = async (clienteId: number): Promise<Ped
 
   if (error) {
     console.error('Error al obtener los pedidos del cliente:', error.message);
+    console.error('Error completo:', error);
     throw error;
   }
   return (data || []) as PedidoConRelaciones[];
