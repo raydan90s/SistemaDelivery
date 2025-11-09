@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchMovimientos } from "@services/movimientos";
 import MovimientosForm from "@pages/movimientosForm";
 import { Plus } from "lucide-react";
