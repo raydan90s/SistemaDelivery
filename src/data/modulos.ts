@@ -19,6 +19,9 @@ import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
 import PedidoAdmin from '@components/admin/PedidoAdmin';
 import Factura from '@components/admin/Factura';
 
+import  UserRolesAdmin  from '@components/admin/UserRolesAdmin';
+
+
 export interface Module {
   id: ModuleType;
   name: string;
@@ -190,6 +193,15 @@ export const modules: Module[] = [
     color: 'bg-blue-500',
     component: TipoDocumentoAdmin,
     category: 'configuracion'
+  },
+  {
+    id: 'user_roles',
+    name: 'Roles de Usuarios',
+    description: 'Gestiona los roles y permisos de los usuarios',
+    icon: Users,
+    color: 'bg-green-500',
+    component: UserRolesAdmin,
+    category: 'configuracion', 
   },
   {
     id: 'clientes' as ModuleType,

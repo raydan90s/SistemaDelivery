@@ -18,4 +18,5 @@ export type ModuleType =
   | 'empleados'
   | 'tipoEmpleado'
   | 'facturacion'
+  | 'user_roles'
   | null;
