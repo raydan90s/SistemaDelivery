@@ -1,5 +1,6 @@
 import { supabase } from '@services/supabase';
 import type { Database } from '@models/supabase';
+import { fetchEstadosGenerales } from '@services/estadosGenerales';
 
 type TipoEmpleado = Database['public']['Tables']['tipoempleado']['Row'];
 type TipoEmpleadoInsert = Database['public']['Tables']['tipoempleado']['Insert'];
@@ -73,14 +74,24 @@ export async function updateTipoEmpleado(id: number, tipoEmpleado: TipoEmpleadoU
 }
 
 export async function deleteTipoEmpleado(id: number) {
-  const { error } = await supabase
-    .from('tipoempleado')
-    .delete()
-    .eq('id', id);
-
-  if (error) {
-    console.error('Error al eliminar tipo de empleado:', error);
-    throw error;
-  }
-  return true;
+  
+  const estados = await fetchEstadosGenerales();
+    const estadoInactivo = estados.find(e => e.descripcion.toLowerCase() === 'inactivo');
+  
+    if (!estadoInactivo) {
+      throw new Error('No se encontró el estado Inactivo');
+    }
+  
+    const { data, error } = await supabase
+      .from('tipoempleado')
+      .update({ estado_id: estadoInactivo.id })
+      .eq('id', id)
+      .select()
+      .single();
+  
+    if (error) {
+      throw error;
+    }
+    return true;
+  
 }
