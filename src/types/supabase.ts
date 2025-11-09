@@ -100,37 +100,28 @@ export type Database = {
       }
       clientes: {
         Row: {
-          apellido: string | null
-          celular: string | null
-          correo: string | null
           estado_id: number | null
           id: number
-          nombre: string
           numero_documento: string | null
           tipo_cliente_id: number | null
           tipo_documento_id: number | null
+          usuario_id: number | null
         }
         Insert: {
-          apellido?: string | null
-          celular?: string | null
-          correo?: string | null
           estado_id?: number | null
           id?: number
-          nombre: string
           numero_documento?: string | null
           tipo_cliente_id?: number | null
           tipo_documento_id?: number | null
+          usuario_id?: number | null
         }
         Update: {
-          apellido?: string | null
-          celular?: string | null
-          correo?: string | null
           estado_id?: number | null
           id?: number
-          nombre?: string
           numero_documento?: string | null
           tipo_cliente_id?: number | null
           tipo_documento_id?: number | null
+          usuario_id?: number | null
         }
         Relationships: [
           {
@@ -152,6 +143,13 @@ export type Database = {
             columns: ["estado_id"]
             isOneToOne: false
             referencedRelation: "estados_generales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clientes_ibfk_usuario"
+            columns: ["usuario_id"]
+            isOneToOne: true
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           },
         ]
@@ -297,31 +295,22 @@ export type Database = {
       }
       empleados: {
         Row: {
-          apellido: string | null
-          celular: string | null
-          correo: string | null
           estado_id: number | null
           id: number
-          nombre: string
           tipo_empleado_id: number | null
+          usuario_id: number | null
         }
         Insert: {
-          apellido?: string | null
-          celular?: string | null
-          correo?: string | null
           estado_id?: number | null
           id?: number
-          nombre: string
           tipo_empleado_id?: number | null
+          usuario_id?: number | null
         }
         Update: {
-          apellido?: string | null
-          celular?: string | null
-          correo?: string | null
           estado_id?: number | null
           id?: number
-          nombre?: string
           tipo_empleado_id?: number | null
+          usuario_id?: number | null
         }
         Relationships: [
           {
@@ -336,6 +325,13 @@ export type Database = {
             columns: ["estado_id"]
             isOneToOne: false
             referencedRelation: "estados_generales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "empleados_ibfk_usuario"
+            columns: ["usuario_id"]
+            isOneToOne: true
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           },
         ]
@@ -691,6 +687,7 @@ export type Database = {
           descripcion: string | null
           estado_id: number | null
           id: number
+          imagen_url: string | null
           nombre: string
           precio_base: number
           stock_minimo: number | null
@@ -701,6 +698,7 @@ export type Database = {
           descripcion?: string | null
           estado_id?: number | null
           id?: number
+          imagen_url?: string | null
           nombre: string
           precio_base: number
           stock_minimo?: number | null
@@ -711,6 +709,7 @@ export type Database = {
           descripcion?: string | null
           estado_id?: number | null
           id?: number
+          imagen_url?: string | null
           nombre?: string
           precio_base?: number
           stock_minimo?: number | null
@@ -748,6 +747,7 @@ export type Database = {
           fecha_fin: string | null
           fecha_inicio: string | null
           id: number
+          imagen_url: string | null
           nombre: string
         }
         Insert: {
@@ -757,6 +757,7 @@ export type Database = {
           fecha_fin?: string | null
           fecha_inicio?: string | null
           id?: number
+          imagen_url?: string | null
           nombre: string
         }
         Update: {
@@ -766,6 +767,7 @@ export type Database = {
           fecha_fin?: string | null
           fecha_inicio?: string | null
           id?: number
+          imagen_url?: string | null
           nombre?: string
         }
         Relationships: [
@@ -1111,9 +1113,8 @@ export type Database = {
       usuarios: {
         Row: {
           apellido: string | null
-          contrasena: string
-          correo: string
-          empleado_id: number | null
+          auth_user_id: string | null
+          celular: string | null
           estado_id: number | null
           id: number
           nombre: string
@@ -1121,9 +1122,8 @@ export type Database = {
         }
         Insert: {
           apellido?: string | null
-          contrasena: string
-          correo: string
-          empleado_id?: number | null
+          auth_user_id?: string | null
+          celular?: string | null
           estado_id?: number | null
           id?: number
           nombre: string
@@ -1131,22 +1131,14 @@ export type Database = {
         }
         Update: {
           apellido?: string | null
-          contrasena?: string
-          correo?: string
-          empleado_id?: number | null
+          auth_user_id?: string | null
+          celular?: string | null
           estado_id?: number | null
           id?: number
           nombre?: string
           rol_id?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "usuarios_ibfk_1"
-            columns: ["empleado_id"]
-            isOneToOne: false
-            referencedRelation: "empleados"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "usuarios_ibfk_2"
             columns: ["rol_id"]
