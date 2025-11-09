@@ -57,7 +57,7 @@ export const obtenerPedidos = async () => {
     console.error('Error al obtener los pedidos:', error.message);
     throw error;
   }
-  return (data || []) as PedidoConRelaciones[];
+  return (data as unknown as PedidoConRelaciones[]) || [];
 };
 
 // Obtener pedidos por cliente_id
@@ -104,7 +104,7 @@ export const obtenerPedidosPorClienteId = async (clienteId: number): Promise<Ped
     console.error('Error completo:', error);
     throw error;
   }
-  return (data || []) as PedidoConRelaciones[];
+  return (data as unknown as PedidoConRelaciones[]) || [];
 };
 // Obtener un pedido por su ID
 export const obtenerPedidoPorId = async (id: number): Promise<PedidoConRelaciones> => {

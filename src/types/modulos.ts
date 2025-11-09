@@ -18,4 +18,5 @@ export type ModuleType =
   | 'tipoEmpleado'
   | 'facturacion'
   | 'user_roles'
+  | 'movimientosBodegas'
   | null;

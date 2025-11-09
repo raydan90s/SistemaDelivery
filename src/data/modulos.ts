@@ -1,4 +1,4 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Truck, Car, Box, UserCircle } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Truck, Car, Box, UserCircle, ArrowLeftRight } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
@@ -17,6 +17,8 @@ import RepartidoresAdmin from '@components/admin/RepartidoresAdmin';
 import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
 import PedidoAdmin from '@components/admin/PedidoAdmin';
 import Factura from '@components/admin/Factura';
+import gestionBodegas from '@components/admin/gestionBodegasAdmin'; 
+import gestionMovimientos from '@components/gestionMovimientos';
 
 import  UserRolesAdmin  from '@components/admin/UserRolesAdmin';
 
@@ -37,6 +39,7 @@ export const moduleCategories = [
   { id: 'finanzas', name: 'Finanzas y Facturación', icon: DollarSign, color: 'bg-emerald-500' },
   { id: 'ubicacion', name: 'Ubicación y Geografía', icon: MapPin, color: 'bg-purple-500' },
   { id: 'configuracion', name: 'Configuración General', icon: Settings, color: 'bg-gray-500' },
+  {id: 'inventario', name: 'Inventario y Bodegas', icon: Building2, color: 'bg-yellow-500' },
 ];
 
 export const modules: Module[] = [
@@ -210,6 +213,26 @@ export const modules: Module[] = [
     color: 'bg-gray-500',
     component: EstadosGeneralesAdmin,
     category: 'configuracion'
+  },
+
+  // INVENTARIO Y BODEGAS
+  {
+    id: 'bodegas' as ModuleType,
+    name: 'Bodegas',
+    description: 'Gestión de bodegas e inventarios',
+    icon: Building2,
+    color: 'bg-yellow-500',
+    component: gestionBodegas,
+    category: 'inventario'
+  },
+  {
+    id: 'movimientosBodegas' as ModuleType,
+    name: 'Movimientos Bodegas',
+    description: 'Gestion de movimientos de bodegas',
+    icon:  ArrowLeftRight,
+    color: 'bg-blue-500',
+    component: gestionMovimientos,
+    category: 'inventario'
   },
 ];
 
