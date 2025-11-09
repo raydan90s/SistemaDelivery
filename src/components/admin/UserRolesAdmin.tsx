@@ -97,16 +97,17 @@ export default function UserRolesAdmin() {
   });
 
   return (
-    <SimpleTableAdmin<Usuario, UsuarioInsert, UsuarioUpdate>
-      title="Roles de Usuarios"
-      description="Administración de los roles de los usuarios del sistema"
-      buttonLabel="Nuevo Usuario"
-      fields={fields}
-      columns={columns}
-      operations={operations}
-      searchFields={['nombre','rol_nombre']}
-      getFormData={getFormData}
-      getInitialFormData={getInitialFormData}
-    />
-  );
+  <SimpleTableAdmin<Usuario, UsuarioInsert, UsuarioUpdate>
+    title="Roles de Usuarios"
+    description="Administración de los roles de los usuarios del sistema"
+    buttonLabel="Nuevo Usuario"
+    hideCreateButton={true}  // <-- botón oculto
+    fields={fields}
+    columns={columns}
+    operations={operations}
+    searchFields={['nombre','rol_nombre']}
+    getFormData={getFormData}
+    getInitialFormData={getInitialFormData}
+  />
+);
 }

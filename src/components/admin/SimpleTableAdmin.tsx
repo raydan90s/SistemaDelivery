@@ -3,6 +3,9 @@ import { Edit2, Trash2, Search, X } from 'lucide-react';
 import NuevoButton from '@components/Botones/nuevoButton';
 import ExportButtons from '@components/Botones/ExportButtons';
 import ImageUpload from '@components/ImageUpload';
+import { modules as allModules} from '@data/modulos';
+import type { Module } from '@data/modulos';
+import type { ModuleType } from '@models/modulos';
 
 interface Field {
   name: string;
@@ -135,6 +138,17 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
 
   const handleInputChange = (fieldName: string, value: any) => {
     setFormValues(prev => ({ ...prev, [fieldName]: value }));
+  };
+
+  const handleInputChangePermissions = (module: ModuleType, value: boolean) => {
+  setFormValues(prev => {
+    const current: ModuleType[] = prev.permissions || [];
+    if (value) {
+      return { ...prev, permissions: [...current, module] };
+    } else {
+      return { ...prev, permissions: current.filter(m => m !== module) };
+    }
+  });
   };
 
   const handleSubmit = async () => {
@@ -382,6 +396,26 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
                   )}
                 </div>
               ))}
+            <div className="mb-4">
+              <h4 className="text-lg font-semibold text-gray-800 mb-2">Permisos</h4>
+              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border p-2 rounded">
+                {allModules.map((module: Module) => (
+                  <label key={module.id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={formValues.permissions?.includes(module.id)}
+                      onChange={(e) =>
+                        handleInputChangePermissions(module.id as ModuleType, e.target.checked)
+                      }
+                    />
+                    <span className="capitalize">{module.name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+
+
             </div>
 
             <div className="flex gap-3 justify-end p-6 border-t flex-shrink-0">
