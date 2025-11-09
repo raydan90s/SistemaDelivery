@@ -5,12 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { crearPedido } from '@services/pedido';
 import { crearDetallePedido } from '@services/detallespedido';
 import PaymentModal from '@components/PaymentModal';
+import { createFactura } from '@services/facturaService';
+import { createDetalleFactura } from '@services/detalleFacturaService';
 import { fetchIVA } from '@services/IVA';
 import { fetchRepartidoresActivos } from '@services/repartidores';
 import type { Database } from '@models/supabase';
 import { scrollToHashOnLoad, handleScrollToTop } from '@utils/scrollUtils';
 import { useLocation } from 'react-router-dom';
 type Repartidor = Database['public']['Tables']['repartidores']['Row'];
+
 
 const CartPage = () => {
     const navigate = useNavigate();
@@ -103,8 +106,10 @@ const CartPage = () => {
             estado_id: 1 //Activo
         };
 
+
         try {
             const pedidoCreado = await crearPedido(nuevoPedido);
+            
 
             if (!pedidoCreado || pedidoCreado.length === 0) {
                 throw new Error('No se pudo crear el pedido');
@@ -127,6 +132,61 @@ const CartPage = () => {
                     console.error('❌ Error al crear detalle para producto:', item.id);
                 }
             }
+
+
+            console.log('Pedido y detalles creados exitosamente');
+            // ======================================================= Facturación
+
+                        
+            try {
+                const ivaData = await fetchIVA();
+                let ivaIdActivo = 1; // Valor por defecto
+
+                if (ivaData && ivaData.length > 0) {
+                    const ivaActivo = ivaData.find(iva => iva.estado_id === 1);
+                    if (ivaActivo) {
+                        ivaIdActivo = ivaActivo.id;
+                    } else {
+                        ivaIdActivo = ivaData[ivaData.length - 1].id;
+                    }
+                }
+
+                // crear factura 
+                const nuevaFactura = {
+                    cliente_id: 1,
+                    pedido_id: pedidoId,
+                    fecha: new Date().toISOString(),
+                    total: getTotalPrice(),
+                    estado_id: 1,
+                    metodo_pago_id: 1,
+                    iva_id: ivaIdActivo
+                };
+
+                const facturaCreada = await createFactura(nuevaFactura);
+                const facturaId = facturaCreada.id;
+                
+
+                // detalles de factura
+                for (const item of cartItems) {
+                    const detalleFactura = {
+                        factura_id: facturaId,
+                        producto_nombre: item.name,
+                        cantidad: item.quantity,
+                        precio: item.price,
+                        subtotal: item.price * item.quantity
+                    };
+
+                    await createDetalleFactura(detalleFactura);
+                }
+            } catch (error) {
+                throw error;
+            }
+  
+
+
+        // ======================================================= Facturación
+
+
 
             setTimeout(() => {
                 clearCart();
