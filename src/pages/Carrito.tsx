@@ -16,6 +16,7 @@ import type { Database } from '@models/supabase';
 import { scrollToHashOnLoad, handleScrollToTop } from '@utils/scrollUtils';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@context/AuthContext';
+import { fetchMetodoPagoActivos, type MetodoPagoConEstado } from '@services/metodosPago';
 
 type Repartidor = Database['public']['Tables']['repartidores']['Row'];
 
@@ -33,7 +34,28 @@ const CartPage = () => {
     const [direcciones, setDirecciones] = useState<DireccionClienteCompleta[]>([]);
     const [selectedDireccionId, setSelectedDireccionId] = useState<number | undefined>(undefined);
     const [isLoadingDirecciones, setIsLoadingDirecciones] = useState(true);
+    const [metodosPago, setMetodosPago] = useState<MetodoPagoConEstado[]>([]);
+    const [selectedMetodoPagoId, setSelectedMetodoPagoId] = useState<number | undefined>(undefined);
 
+
+    useEffect(() => {
+        const obtenerMetodosPago = async () => {
+            try {
+                const metodosData = await fetchMetodoPagoActivos();
+                setMetodosPago(metodosData);
+
+                // Seleccionar automáticamente el primer método de pago si existe
+                if (metodosData.length > 0 && !selectedMetodoPagoId) {
+                    setSelectedMetodoPagoId(metodosData[0].id);
+                }
+            } catch (error) {
+                console.error('❌ Error al obtener métodos de pago:', error);
+                setMetodosPago([]);
+            }
+        };
+        obtenerMetodosPago();
+    }, []);
+    
     // Efecto de scroll
     useEffect(() => {
         if (location.hash) {
@@ -136,6 +158,11 @@ const CartPage = () => {
         setSelectedDireccionId(direccionId);
     };
 
+    // Handler para seleccionar método de pago
+    const handleSelectMetodoPago = (metodoPagoId: number) => {
+        setSelectedMetodoPagoId(metodoPagoId);
+    };
+
     // Handlers
     const handleProceedToPayment = () => {
         if (!user || !usuarioData) {
@@ -160,6 +187,11 @@ const CartPage = () => {
             return;
         }
 
+        if (!selectedMetodoPagoId) {
+            alert('Por favor selecciona un método de pago');
+            return;
+        }
+
         setShowPaymentModal(true);
         handleScrollToTop();
     };
@@ -173,6 +205,11 @@ const CartPage = () => {
 
         if (!selectedDireccionId) {
             alert('Por favor selecciona una dirección de entrega');
+            return;
+        }
+
+        if (!selectedMetodoPagoId) {
+            alert('Por favor selecciona un método de pago');
             return;
         }
 
@@ -231,7 +268,7 @@ const CartPage = () => {
                 fecha: new Date().toISOString(),
                 total: getTotalPrice(),
                 estado_id: 1,
-                metodo_pago_id: 1,
+                metodo_pago_id: selectedMetodoPagoId, // Usar el método seleccionado
                 iva_id: ivaIdActivo
             };
 
@@ -343,6 +380,9 @@ const CartPage = () => {
                                 isLoadingDirecciones={isLoadingDirecciones}
                                 selectedDireccionId={selectedDireccionId}
                                 onSelectDireccion={handleSelectDireccion}
+                                metodosPago={metodosPago}
+                                selectedMetodoPagoId={selectedMetodoPagoId}
+                                onSelectMetodoPago={handleSelectMetodoPago}
                                 onProceedToPayment={handleProceedToPayment}
                                 onNavigateToProfile={() => navigate('/cliente/perfil')}
                             />
