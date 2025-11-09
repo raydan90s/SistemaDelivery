@@ -1,4 +1,4 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Truck, Car, Box, UserCircle } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Truck, Car, Box, UserCircle, ArrowLeftRight } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
@@ -19,6 +19,7 @@ import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
 import PedidoAdmin from '@components/admin/PedidoAdmin';
 import Factura from '@components/admin/Factura';
 import gestionBodegas from '@components/admin/gestionBodegasAdmin'; 
+import gestionMovimientos from '@components/gestionMovimientos';
 
 export interface Module {
   id: ModuleType;
@@ -220,6 +221,15 @@ export const modules: Module[] = [
     icon: Building2,
     color: 'bg-yellow-500',
     component: gestionBodegas,
+    category: 'inventario'
+  },
+  {
+    id: 'movimientosBodegas' as ModuleType,
+    name: 'Movimientos Bodegas',
+    description: 'Gestion de movimientos de bodegas',
+    icon:  ArrowLeftRight,
+    color: 'bg-blue-500',
+    component: gestionMovimientos,
     category: 'inventario'
   },
 ];

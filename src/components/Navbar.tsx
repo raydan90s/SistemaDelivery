@@ -16,7 +16,6 @@ const Navbar: React.FC = () => {
   const isAdmin = usuarioData?.rol?.nombre === 'Administrador' || usuarioData?.rol?.nombre === 'Super Administrador';
 
   useEffect(() => {
-    console.log('Usuario', usuarioData);
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setShowUserMenu(false);

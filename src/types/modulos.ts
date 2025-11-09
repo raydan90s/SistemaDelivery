@@ -18,4 +18,5 @@ export type ModuleType =
   | 'empleados'
   | 'tipoEmpleado'
   | 'facturacion'
+  | 'movimientosBodegas'
   | null;
