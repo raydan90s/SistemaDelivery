@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchBodegas } from "@services/bodegas";
 import { fetchProductos } from "@services/productos";
-import { fetchMovimientos, createMovimiento } from "@services/movimientos";
+import { createMovimiento } from "@services/movimientos";
 
 type Bodega = {
   id: number;
@@ -45,7 +45,7 @@ const MovimientosForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const loadData = async () => {
     setBodegas(await fetchBodegas());
     setProductos(await fetchProductos());
-    // setTipos(await fetchTiposMovimientos()); // Remove or replace with correct function
+    setTipos([]); 
   };
 
   useEffect(() => {

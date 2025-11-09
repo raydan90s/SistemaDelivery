@@ -35,3 +35,24 @@ export async function deleteMovimiento(id: number) {
   const { error } = await supabase.from('movimientos').delete().eq('id', id);
   if (error) throw error;
 }
+
+export async function fetchMovimientosByTipo(tipoMovimientoId: number) {
+  const { data, error } = await supabase
+    .from('movimientos')
+    .select(`
+      id,
+      fecha,
+      cantidad,
+      observaciones,
+      bodegas: bodega_id (id, nombre, ubicacion),
+      producto: producto_id (id, nombre),
+      tipo: tipo_movimiento_id (id, descripcion),
+      empleado: empleado_id (id, nombres, apellidos),
+      estado: estado_id (id, descripcion)
+    `)
+    .eq('tipo_movimiento_id', tipoMovimientoId)
+    .order('fecha', { ascending: false });
+
+  if (error) throw error;
+  return data;
+}

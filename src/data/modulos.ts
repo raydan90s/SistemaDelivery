@@ -18,6 +18,7 @@ import RepartidoresAdmin from '@components/admin/RepartidoresAdmin';
 import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
 import PedidoAdmin from '@components/admin/PedidoAdmin';
 import Factura from '@components/admin/Factura';
+import gestionBodegas from '@pages/gestionBodegas'; 
 
 export interface Module {
   id: ModuleType;
@@ -35,6 +36,7 @@ export const moduleCategories = [
   { id: 'finanzas', name: 'Finanzas y Facturación', icon: DollarSign, color: 'bg-emerald-500' },
   { id: 'ubicacion', name: 'Ubicación y Geografía', icon: MapPin, color: 'bg-purple-500' },
   { id: 'configuracion', name: 'Configuración General', icon: Settings, color: 'bg-gray-500' },
+  {id: 'inventario', name: 'Inventario y Bodegas', icon: Building2, color: 'bg-yellow-500' },
 ];
 
 export const modules: Module[] = [
@@ -208,6 +210,17 @@ export const modules: Module[] = [
     color: 'bg-gray-500',
     component: EstadosGeneralesAdmin,
     category: 'configuracion'
+  },
+
+  // INVENTARIO Y BODEGAS
+  {
+    id: 'bodegas' as ModuleType,
+    name: 'Bodegas',
+    description: 'Gestión de bodegas e inventarios',
+    icon: Building2,
+    color: 'bg-yellow-500',
+    component: gestionBodegas,
+    category: 'inventario'
   },
 ];
 

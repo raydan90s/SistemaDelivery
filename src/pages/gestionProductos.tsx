@@ -41,7 +41,7 @@ const gestionProductos: React.FC = () => {
 
   const startEdit = async (id: number) => {
     const p = await fetchProductoById(id);
-    setForm({ nombre: p.nombre, descripcion: p.descripcion, precio_base: p.precio_base?.toString() ?? "" });
+    setForm({ nombre: p.nombre, descripcion: p.descripcion?.toString() ?? "", precio_base: p.precio_base?.toString() ?? "" });
     setEditingId(id);
     setIsEditing(true);
   };
