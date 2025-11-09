@@ -1,9 +1,10 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Truck, Car, Box } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Truck, Car, Box, UserCircle } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
 import ProvinciasAdmin from '@components/admin/ProvinciaAdmin';
 import CiudadesAdmin from '@components/admin/CiudadesAdmin';
+import ClientesAdmin from '@components/admin/ClientesAdmin';
 import ProductosAdmin from '@components/admin/ProductosAdmin';
 import CategoriasProductoAdmin from '@components/admin/CategoriasProductoAdmin';
 import PromocionesAdminAvanzado from '@components/admin/PromocionesAdminAvanzado';
@@ -188,6 +189,15 @@ export const modules: Module[] = [
     icon: FileText,
     color: 'bg-blue-500',
     component: TipoDocumentoAdmin,
+    category: 'configuracion'
+  },
+  {
+    id: 'clientes' as ModuleType,
+    name: 'Clientes',
+    description: 'Clientes registrados en el sistema',
+    icon: UserCircle,
+    color: 'bg-teal-500',
+    component: ClientesAdmin,
     category: 'configuracion'
   },
   {

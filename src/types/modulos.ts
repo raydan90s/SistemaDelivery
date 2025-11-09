@@ -4,6 +4,7 @@ export type ModuleType =
   | 'unidadmedida'
   | 'provincias'
   | 'ciudades'
+  | 'clientes'
   | 'estados'
   | 'metodopago'
   | 'iva'
@@ -14,4 +15,7 @@ export type ModuleType =
   | "repartidores"
   | "tipovehiculo"
   | 'pedidoAdmin'
+  | 'empleados'
+  | 'tipoEmpleado'
+  | 'facturacion'
   | null;

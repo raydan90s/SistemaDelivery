@@ -89,7 +89,7 @@ const FeaturedProducts: React.FC = () => {
                         image: producto.imagen_url || '',
                         category: producto.categoria?.nombre || 'Sin categoría'
                       })}
-                      className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110"
+                      className="bg-primary hover:bg-primary-hover text-white p-3 rounded-full shadow-md transition-all ease-in-out duration-300 hover:scale-110 cursor-pointer"
                     >
                       <Plus className="w-5 h-5" />
                     </button>
@@ -104,7 +104,7 @@ const FeaturedProducts: React.FC = () => {
                             updateQuantity(producto.id.toString(), quantity - 1);
                           }
                         }}
-                        className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors"
+                        className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors cursor-pointer"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
@@ -113,7 +113,7 @@ const FeaturedProducts: React.FC = () => {
                       </span>
                       <button
                         onClick={() => updateQuantity(producto.id.toString(), getProductQuantity(producto.id.toString()) + 1)}
-                        className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors"
+                        className="text-white hover:bg-primary-hover p-2 rounded-full transition-colors cursor-pointer"
                       >
                         <Plus className="w-4 h-4" />
                       </button>

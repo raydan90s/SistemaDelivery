@@ -22,7 +22,7 @@ const Hero: React.FC = () => {
         <p className="text-lg md:text-xl mb-8 drop-shadow-md">
           Los mejores platillos, entregados rápido y caliente
         </p>
-        <button className="bg-primary hover:bg-primary-hover cursor-pointer text-white font-semibold px-8 py-4 rounded-full text-lg shadow-lg transition-all ease-in-out duration-300 hover:scale-105 cursor-pointer">
+        <button className="bg-primary hover:bg-primary-hover cursor-pointer text-white font-semibold px-8 py-4 rounded-full text-lg shadow-lg transition-all ease-in-out duration-300 hover:scale-105">
           Ordena ahora
         </button>
       </div>
