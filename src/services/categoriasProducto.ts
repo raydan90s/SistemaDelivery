@@ -68,9 +68,10 @@ export async function updateCategoriaProducto(id: number, categoria: CategoriaPr
 }
 
 export async function deleteCategoriaProducto(id: number) {
+  const ESTADO_INACTIVO = 2;
   const { error } = await supabase
     .from('categoriasproducto')
-    .delete()
+    .update({ estado_id: ESTADO_INACTIVO })
     .eq('id', id);
 
   if (error) {
