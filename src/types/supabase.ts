@@ -7,8 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  // Permite instanciar automáticamente createClient con las opciones correctas en lugar de createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
   }
@@ -735,83 +734,6 @@ export type Database = {
             columns: ["estado_id"]
             isOneToOne: false
             referencedRelation: "estados_generales"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      promociones: {
-        Row: {
-          descripcion: string | null
-          descuento: number | null
-          estado_id: number | null
-          fecha_fin: string | null
-          fecha_inicio: string | null
-          id: number
-          imagen_url: string | null
-          nombre: string
-        }
-        Insert: {
-          descripcion?: string | null
-          descuento?: number | null
-          estado_id?: number | null
-          fecha_fin?: string | null
-          fecha_inicio?: string | null
-          id?: number
-          imagen_url?: string | null
-          nombre: string
-        }
-        Update: {
-          descripcion?: string | null
-          descuento?: number | null
-          estado_id?: number | null
-          fecha_fin?: string | null
-          fecha_inicio?: string | null
-          id?: number
-          imagen_url?: string | null
-          nombre?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "promociones_ibfk_1"
-            columns: ["estado_id"]
-            isOneToOne: false
-            referencedRelation: "estados_generales"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      promocionesproductos: {
-        Row: {
-          cantidad: number
-          id: number
-          producto_id: number | null
-          promocion_id: number | null
-        }
-        Insert: {
-          cantidad: number
-          id?: number
-          producto_id?: number | null
-          promocion_id?: number | null
-        }
-        Update: {
-          cantidad?: number
-          id?: number
-          producto_id?: number | null
-          promocion_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "promocionesproductos_ibfk_1"
-            columns: ["promocion_id"]
-            isOneToOne: false
-            referencedRelation: "promociones"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "promocionesproductos_ibfk_2"
-            columns: ["producto_id"]
-            isOneToOne: false
-            referencedRelation: "productos"
             referencedColumns: ["id"]
           },
         ]

@@ -1,4 +1,4 @@
-import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Gift, Truck, Car, Box, UserCircle } from 'lucide-react';
+import { Settings, Package, MapPin, DollarSign, FileText, Users, Building2, Percent, ShoppingBag, Tags, Truck, Car, Box, UserCircle, ArrowLeftRight } from 'lucide-react';
 import TipoDocumentoAdmin from '@components/admin/TipoDocumentoAdmin';
 import type { ModuleType } from '@models/modulos';
 import UnidadMedidaAdmin from '@components/admin/UnidadMedidaAdmin';
@@ -7,7 +7,6 @@ import CiudadesAdmin from '@components/admin/CiudadesAdmin';
 import ClientesAdmin from '@components/admin/ClientesAdmin';
 import ProductosAdmin from '@components/admin/ProductosAdmin';
 import CategoriasProductoAdmin from '@components/admin/CategoriasProductoAdmin';
-import PromocionesAdminAvanzado from '@components/admin/PromocionesAdminAvanzado';
 import IVAAdmin from '@components/admin/IVAAdmin';
 import ProveedoresAdmin from '@components/admin/ProveedoresAdmin';
 import EstadosGeneralesAdmin from '@components/admin/EstadosGeneralesAdmin';
@@ -18,6 +17,11 @@ import RepartidoresAdmin from '@components/admin/RepartidoresAdmin';
 import TipoVehiculoAdmin from '@components/admin/TipoVehiculoAdmin';
 import PedidoAdmin from '@components/admin/PedidoAdmin';
 import Factura from '@components/admin/Factura';
+import gestionBodegas from '@components/admin/gestionBodegasAdmin'; 
+import gestionMovimientos from '@components/gestionMovimientos';
+
+import  UserRolesAdmin  from '@components/admin/UserRolesAdmin';
+
 
 export interface Module {
   id: ModuleType;
@@ -35,6 +39,7 @@ export const moduleCategories = [
   { id: 'finanzas', name: 'Finanzas y Facturación', icon: DollarSign, color: 'bg-emerald-500' },
   { id: 'ubicacion', name: 'Ubicación y Geografía', icon: MapPin, color: 'bg-purple-500' },
   { id: 'configuracion', name: 'Configuración General', icon: Settings, color: 'bg-gray-500' },
+  {id: 'inventario', name: 'Inventario y Bodegas', icon: Building2, color: 'bg-yellow-500' },
 ];
 
 export const modules: Module[] = [
@@ -55,15 +60,6 @@ export const modules: Module[] = [
     icon: Tags,
     color: 'bg-pink-500',
     component: CategoriasProductoAdmin,
-    category: 'productos'
-  },
-  {
-    id: 'promociones' as ModuleType,
-    name: 'Promociones',
-    description: 'Combos y ofertas con descuentos',
-    icon: Gift,
-    color: 'bg-cyan-500',
-    component: PromocionesAdminAvanzado,
     category: 'productos'
   },
   {
@@ -192,6 +188,15 @@ export const modules: Module[] = [
     category: 'configuracion'
   },
   {
+    id: 'user_roles',
+    name: 'Roles de Usuarios',
+    description: 'Gestiona los roles y permisos de los usuarios',
+    icon: Users,
+    color: 'bg-green-500',
+    component: UserRolesAdmin,
+    category: 'configuracion', 
+  },
+  {
     id: 'clientes' as ModuleType,
     name: 'Clientes',
     description: 'Clientes registrados en el sistema',
@@ -208,6 +213,26 @@ export const modules: Module[] = [
     color: 'bg-gray-500',
     component: EstadosGeneralesAdmin,
     category: 'configuracion'
+  },
+
+  // INVENTARIO Y BODEGAS
+  {
+    id: 'bodegas' as ModuleType,
+    name: 'Bodegas',
+    description: 'Gestión de bodegas e inventarios',
+    icon: Building2,
+    color: 'bg-yellow-500',
+    component: gestionBodegas,
+    category: 'inventario'
+  },
+  {
+    id: 'movimientosBodegas' as ModuleType,
+    name: 'Movimientos Bodegas',
+    description: 'Gestion de movimientos de bodegas',
+    icon:  ArrowLeftRight,
+    color: 'bg-blue-500',
+    component: gestionMovimientos,
+    category: 'inventario'
   },
 ];
 

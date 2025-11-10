@@ -55,9 +55,8 @@ const ProductosAdmin: React.FC = () => {
         },
         {
           name: 'imagen_url',
-          label: 'URL de Imagen',
-          type: 'text',
-          placeholder: 'https://ejemplo.com/imagen.jpg',
+          label: 'Imagen del Producto',
+          type: 'image',
           required: false
         },
         {

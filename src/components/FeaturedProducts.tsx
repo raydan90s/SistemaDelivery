@@ -53,7 +53,7 @@ const FeaturedProducts: React.FC = () => {
           {productos.map((producto) => (
             <div
               key={producto.id}
-              className="bg-white cursor-pointer rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-all ease-in-out duration-300"
+              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-all ease-in-out duration-300"
             >
               <div className="h-48 overflow-hidden bg-gray-200">
                 {producto.imagen_url ? (

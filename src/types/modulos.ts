@@ -11,11 +11,12 @@ export type ModuleType =
   | 'proveedores'
   | 'productos'
   | 'categorias-producto'
-  | 'promociones'
   | "repartidores"
   | "tipovehiculo"
   | 'pedidoAdmin'
   | 'empleados'
   | 'tipoEmpleado'
   | 'facturacion'
+  | 'user_roles'
+  | 'movimientosBodegas'
   | null;

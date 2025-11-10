@@ -5,7 +5,6 @@ type Producto = Database['public']['Tables']['productos']['Row'];
 type ProductoInsert = Database['public']['Tables']['productos']['Insert'];
 type ProductoUpdate = Database['public']['Tables']['productos']['Update'];
 
-// IDs de estados (ajustar según tu base de datos)
 const ESTADO_ACTIVO = 1;
 const ESTADO_INACTIVO = 2;
 
@@ -78,43 +77,14 @@ export async function updateProducto(id: number, producto: ProductoUpdate) {
 
 export async function deleteProducto(id: number) {
   // Soft delete: cambiar estado a inactivo
-  const { error: updateError } = await supabase
+  const { error } = await supabase
     .from('productos')
     .update({ estado_id: ESTADO_INACTIVO })
     .eq('id', id);
 
-  if (updateError) {
-    console.error('Error al inactivar producto:', updateError);
-    throw updateError;
-  }
-
-  // Inactivar todas las promociones que contienen este producto
-  const { data: promocionesProductos, error: fetchError } = await supabase
-    .from('promocionesproductos')
-    .select('promocion_id')
-    .eq('producto_id', id);
-
-  if (fetchError) {
-    console.error('Error al buscar promociones del producto:', fetchError);
-    throw fetchError;
-  }
-
-  if (promocionesProductos && promocionesProductos.length > 0) {
-    const promocionIds = promocionesProductos
-      .map(pp => pp.promocion_id)
-      .filter((id): id is number => id !== null);
-
-    if (promocionIds.length > 0) {
-      const { error: promoError } = await supabase
-        .from('promociones')
-        .update({ estado_id: ESTADO_INACTIVO })
-        .in('id', promocionIds);
-
-      if (promoError) {
-        console.error('Error al inactivar promociones:', promoError);
-        throw promoError;
-      }
-    }
+  if (error) {
+    console.error('Error al inactivar producto:', error);
+    throw error;
   }
 
   return true;

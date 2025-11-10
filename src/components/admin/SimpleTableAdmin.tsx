@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Edit2, Trash2, Search, X } from 'lucide-react';
 import NuevoButton from '@components/Botones/nuevoButton';
 import ExportButtons from '@components/Botones/ExportButtons';
+import ImageUpload from '@components/ImageUpload';
 
 interface Field {
   name: string;
   label: string;
-  type: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select';
+  type: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select' | 'image';
   placeholder?: string;
   required?: boolean;
   readOnly?: boolean;
-  options?: Array<{ value: number | string; label: string }>; 
+  options?: Array<{ value: number | string; label: string }>;
   fetchOptions?: () => Promise<Array<{ value: number | string; label: string }>>;
 }
 
@@ -334,8 +335,13 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {field.label} {field.required && <span className="text-red-500">*</span>}
                   </label>
-                  
-                  {field.type === 'select' ? (
+
+                  {field.type === 'image' ? (
+                    <ImageUpload
+                      onImageUpload={(url) => handleInputChange(field.name, url)}
+                      currentImage={formValues[field.name] || ''}
+                    />
+                  ) : field.type === 'select' ? (
                     <select
                       value={formValues[field.name] || ''}
                       onChange={(e) => handleInputChange(field.name, e.target.value)}

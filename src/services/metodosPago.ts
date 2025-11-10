@@ -113,3 +113,24 @@ export async function fetchMetodoPagoByEstado(estadoID: number) {
   }
   return data as MetodoPago[];
 }
+
+export async function fetchMetodoPagoActivos() {
+  const { data, error } = await supabase
+    .from('metodopago')
+    .select(
+      `
+      *,
+      estados_generales (
+        descripcion
+      )
+    `
+    )
+    .eq('estado_id', 1) 
+    .order('descripcion', { ascending: true });
+
+  if (error) {
+    console.error('Error al obtener los metodos de pago activos:', error);
+    throw error;
+  }
+  return data as MetodoPagoConEstado[];
+}
