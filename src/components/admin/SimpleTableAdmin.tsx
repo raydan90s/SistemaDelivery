@@ -397,22 +397,22 @@ function SimpleTableAdmin<T extends { id: number }, TInsert, TUpdate>({
                 </div>
               ))}
             <div className="mb-4">
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">Permisos</h4>
-              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border p-2 rounded">
-                {allModules.map((module: Module) => (
-                  <label key={module.id} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={formValues.permissions?.includes(module.id)}
-                      onChange={(e) =>
-                        handleInputChangePermissions(module.id as ModuleType, e.target.checked)
-                      }
-                    />
-                    <span className="capitalize">{module.name}</span>
-                  </label>
-                ))}
-              </div>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">Permisos</h4>
+            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border p-2 rounded">
+              {allModules.map((module) => (
+                <label key={module.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formValues.permissions?.includes(module.id)}
+                    onChange={(e) =>
+                      handleInputChangePermissions(module.id as ModuleType, e.target.checked)
+                    }
+                  />
+                  <span className="capitalize">{module.name}</span>
+                </label>
+              ))}
             </div>
+          </div>
 
 
 

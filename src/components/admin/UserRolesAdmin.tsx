@@ -1,5 +1,8 @@
+// src/components/admin/UserRolesAdmin.tsx
 import { supabase } from '@services/supabase';
 import SimpleTableAdmin from '@components/admin/SimpleTableAdmin';
+import type { ModuleType } from '@models/modulos';
+import { modules as allModules } from '@data/modulos';
 
 interface Usuario {
   id: number;
@@ -10,19 +13,28 @@ interface Usuario {
   auth_user_id?: string | null;
   rol_id: number | null;
   rol_nombre?: string | null;
+  permisos?: ModuleType[];
 }
 
 interface UsuarioInsert {
   nombre: string;
   rol_id: number;
+  permisos?: ModuleType[];
 }
 
 interface UsuarioUpdate {
   nombre?: string;
   rol_id?: number;
+  permisos?: ModuleType[];
 }
 
-type Column<T> = { key: keyof T; label: string };
+// Tipo de columna que permite render opcional
+type Column<T> = { 
+  key: keyof T; 
+  label: string; 
+  render?: (value: any, item?: T) => React.ReactNode; 
+};
+
 type Field = { 
   name: string; 
   label: string; 
@@ -43,10 +55,19 @@ export default function UserRolesAdmin() {
     fetch: async () => {
       const { data, error } = await supabase
         .from('usuarios')
-        .select('id, nombre, rol_id, rol:roles(nombre)')
+        .select('id, nombre, rol_id, permisos, rol:roles(nombre)')
         .order('id', { ascending: true });
+
       if (error) throw error;
-      return data.map(u => ({ ...u, rol_nombre: u.rol?.nombre }));
+
+      // Forzamos tipo para evitar errores TS
+      return (data as any[]).map(u => ({
+        id: u.id,
+        nombre: u.nombre,
+        rol_id: u.rol_id,
+        permisos: u.permisos ?? [],
+        rol_nombre: u.rol?.nombre ?? null,
+      })) as Usuario[];
     },
     create: async (item) => {
       const { data, error } = await supabase.from('usuarios').insert(item).select().single();
@@ -62,7 +83,7 @@ export default function UserRolesAdmin() {
       const { error } = await supabase.from('usuarios').delete().eq('id', id);
       if (error) throw error;
       return true;
-    }
+    },
   };
 
   const fields: Field[] = [
@@ -84,30 +105,39 @@ export default function UserRolesAdmin() {
     { key: 'id', label: 'ID' },
     { key: 'nombre', label: 'Nombre' },
     { key: 'rol_nombre', label: 'Rol' },
+    { 
+      key: 'permisos', 
+      label: 'Permisos', 
+      render: (value: ModuleType[]) => (value || []).join(', ') 
+    },
   ];
 
   const getFormData = (formValues: Record<string, any>) => ({
     nombre: formValues.nombre,
     rol_id: Number(formValues.rol_id),
+    permisos: formValues.permissions || [],
   });
 
   const getInitialFormData = (item?: Usuario) => ({
     nombre: item?.nombre ?? '',
     rol_id: item?.rol_id ?? '',
+    permissions: item?.permisos || [],
   });
 
   return (
-  <SimpleTableAdmin<Usuario, UsuarioInsert, UsuarioUpdate>
-    title="Roles de Usuarios"
-    description="Administración de los roles de los usuarios del sistema"
-    buttonLabel="Nuevo Usuario"
-    hideCreateButton={true}  // <-- botón oculto
-    fields={fields}
-    columns={columns}
-    operations={operations}
-    searchFields={['nombre','rol_nombre']}
-    getFormData={getFormData}
-    getInitialFormData={getInitialFormData}
-  />
-);
+    <SimpleTableAdmin<Usuario, UsuarioInsert, UsuarioUpdate>
+      title="Roles de Usuarios"
+      description="Administración de los roles y permisos de los usuarios del sistema"
+      buttonLabel="Nuevo Usuario"
+      fields={fields}
+      columns={columns}
+      operations={operations}
+      searchFields={['nombre','rol_nombre']}
+      getFormData={getFormData}
+      getInitialFormData={getInitialFormData}
+      enableExport={true}
+      hideCreateButton={true}
+      customActions={(item) => null} // puedes añadir acciones extra aquí si quieres
+    />
+  );
 }
